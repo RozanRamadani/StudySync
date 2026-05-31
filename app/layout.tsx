@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { StudySyncProvider } from "@/components/providers/StudySyncProvider";
+import { Toaster } from "@/components/ui/Toaster";
 
 export const metadata: Metadata = {
   title: "StudySync — AI-Powered Study Duration Recommendation",
@@ -38,6 +39,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
+            <Toaster />
           </StudySyncProvider>
         </ThemeProvider>
       </body>

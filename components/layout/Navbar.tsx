@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Moon, Sun, User, Menu, X } from "lucide-react";
+import { Moon, Sun, User, Menu, X, LogOut, Cloud, CloudOff, RefreshCw } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { createClient } from "@/lib/supabase/client";
+import { signout } from "@/app/actions/auth";
+import { useStudySync } from "@/components/providers/StudySyncProvider";
 
 const navItems = [
   { href: "/calculator", label: "Calculator" },
@@ -18,6 +21,32 @@ export function Navbar() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    fetchUser();
+    
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const { sessions } = useStudySync();
+
+  const isClientReady = typeof window !== 'undefined';
+  const syncStatus = sessions.some(s => s.syncStatus === "syncing")
+    ? "syncing"
+    : sessions.some(s => s.syncStatus === "failed")
+    ? "failed"
+    : "synced";
 
   return (
     <nav
@@ -97,7 +126,7 @@ export function Navbar() {
                   fontSize: "0.9rem",
                   fontWeight: 500,
                   color: isActive ? "var(--accent-blue)" : "var(--text-secondary)",
-                  textDecoration: isActive ? "underline" : "none",
+                  textDecorationLine: isActive ? "underline" : "none",
                   textUnderlineOffset: "6px",
                   textDecorationThickness: "2px",
                   transition: "color 0.2s ease",
@@ -119,6 +148,12 @@ export function Navbar() {
 
         {/* Right Section */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", marginRight: "8px" }} title={`Sync Status: ${syncStatus}`}>
+            {syncStatus === "syncing" && <RefreshCw size={18} color="var(--accent-blue)" className="animate-spin" />}
+            {syncStatus === "synced" && <Cloud size={18} color="var(--success, #10B981)" />}
+            {syncStatus === "failed" && <CloudOff size={18} color="var(--danger, #EF4444)" />}
+          </div>
+
           <button
             onClick={toggleTheme}
             style={{
@@ -139,24 +174,65 @@ export function Navbar() {
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>
 
-          <button
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid var(--border-color)",
-              backgroundColor: "transparent",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "var(--text-secondary)",
-              transition: "all 0.2s ease",
-            }}
-            aria-label="User menu"
-          >
-            <User size={18} />
-          </button>
+          {user ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <div 
+                style={{ 
+                  width: "40px", 
+                  height: "40px", 
+                  borderRadius: "50%", 
+                  background: "var(--accent-blue-soft)", 
+                  color: "var(--accent-blue)",
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  fontWeight: 600,
+                  fontSize: "0.9rem"
+                }}
+              >
+                {user.email?.charAt(0).toUpperCase()}
+              </div>
+              <button
+                onClick={() => signout()}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  border: "1px solid var(--border-color)",
+                  backgroundColor: "transparent",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  color: "var(--danger, #EF4444)",
+                  transition: "all 0.2s ease",
+                }}
+                title="Sign out"
+                aria-label="Sign out menu"
+              >
+                <LogOut size={18} />
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 16px",
+                borderRadius: "20px",
+                backgroundColor: "var(--accent-blue)",
+                color: "white",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
+            >
+              <User size={16} />
+              Sign in
+            </Link>
+          )}
 
           {/* Mobile menu toggle */}
           <button

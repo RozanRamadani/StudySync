@@ -2,45 +2,123 @@
 
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { FileText, Download, Search, Filter, Flame, TrendingUp, ChevronLeft, ChevronRight, Sparkles, MoreVertical, AlertTriangle, Eye } from "lucide-react";
-import { useStudySync } from "@/components/providers/StudySyncProvider";
+import { FileText, Download, Search, Filter, Flame, TrendingUp, ChevronLeft, ChevronRight, Sparkles, MoreVertical, AlertTriangle, Eye, Loader2, BrainCircuit, Cloud, CloudOff, RefreshCw } from "lucide-react";
+import { useStudySync, StudySession } from "@/components/providers/StudySyncProvider";
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-// Generate heatmap data (4 weeks × 7 days)
-function generateHeatmap(): number[][] {
-  return Array.from({ length: 4 }, () =>
-    Array.from({ length: 7 }, () => Math.floor(Math.random() * 5))
-  );
-}
-
 const heatmapColors = ["var(--bg-primary)", "#DBEAFE", "#93C5FD", "#3B82F6", "#1D4ED8"];
 
-// Fake chart data
-const chartData = [
-  { day: "Mon", value: 40 }, { day: "Tue", value: 55 },
-  { day: "Wed", value: 45 }, { day: "Thu", value: 70 },
-  { day: "Fri", value: 65 }, { day: "Sat", value: 80 },
-  { day: "Sun", value: 75 },
-];
+function normalizeDate(d: Date) {
+  const norm = new Date(d);
+  norm.setHours(0, 0, 0, 0);
+  return norm.getTime();
+}
+
+function calculateAnalytics(sessions: StudySession[]) {
+  const now = new Date();
+  const todayVal = normalizeDate(now);
+  const oneDay = 86400000;
+
+  const dayMap = new Map<number, StudySession[]>();
+  sessions.forEach(s => {
+    const dVal = normalizeDate(s.timestamp);
+    if (!dayMap.has(dVal)) dayMap.set(dVal, []);
+    dayMap.get(dVal)!.push(s);
+  });
+
+  // Calculate Streak
+  let streak = 0;
+  let checkVal = todayVal;
+  
+  if (!dayMap.has(checkVal)) {
+    checkVal -= oneDay; // start checking from yesterday if no session today
+  }
+  
+  while (dayMap.has(checkVal) && dayMap.get(checkVal)!.length > 0) {
+    streak++;
+    checkVal -= oneDay;
+  }
+
+  // Calculate Focus Efficiency (avg confidence)
+  const totalConf = sessions.reduce((acc, s) => acc + s.confidence, 0);
+  const avgConfidence = sessions.length ? Math.round(totalConf / sessions.length) : 0;
+
+  // Week Productivity vs Last Week
+  const thisWeekStart = todayVal - (7 * oneDay);
+  const lastWeekStart = thisWeekStart - (7 * oneDay);
+  
+  let thisWeekFocusSum = 0;
+  let thisWeekCount = 0;
+  let lastWeekFocusSum = 0;
+  let lastWeekCount = 0;
+
+  sessions.forEach(s => {
+    const t = s.timestamp.getTime();
+    if (t >= thisWeekStart) {
+      thisWeekFocusSum += s.focus;
+      thisWeekCount++;
+    } else if (t >= lastWeekStart && t < thisWeekStart) {
+      lastWeekFocusSum += s.focus;
+      lastWeekCount++;
+    }
+  });
+
+  const thisWeekAvg = thisWeekCount ? Math.round(thisWeekFocusSum / thisWeekCount) : 0;
+  const lastWeekAvg = lastWeekCount ? Math.round(lastWeekFocusSum / lastWeekCount) : 0;
+  const diff = thisWeekAvg - lastWeekAvg;
+
+  // Chart Data (Last 7 days, ascending)
+  const chartData = [];
+  const standardDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  for (let i = 6; i >= 0; i--) {
+    const dVal = todayVal - (i * oneDay);
+    const dDate = new Date(dVal);
+    const dayLabel = standardDays[dDate.getDay()];
+    const daySessions = dayMap.get(dVal) || [];
+    const avgFocus = daySessions.length ? Math.round(daySessions.reduce((acc, s) => acc + s.focus, 0) / daySessions.length) : 0;
+    chartData.push({ day: dayLabel, value: avgFocus });
+  }
+
+  // Heatmap Data (4 weeks * 7 days) mapped to Mon-Sun cols
+  const heatmap: number[][] = [];
+  const currDay = now.getDay(); 
+  const daysSinceMonday = currDay === 0 ? 6 : currDay - 1; 
+  const thisMondayVal = todayVal - (daysSinceMonday * oneDay);
+  const hmStart = thisMondayVal - (21 * oneDay); // go back exactly 3 prior weeks + this week = 4 weeks
+  
+  for (let w = 0; w < 4; w++) {
+    const row = [];
+    for (let d = 0; d < 7; d++) {
+      const dVal = hmStart + ((w * 7 + d) * oneDay);
+      if (dVal > todayVal) {
+        row.push(0);
+        continue;
+      }
+      const ct = (dayMap.get(dVal) || []).length;
+      let intensity = 0;
+      if (ct === 1) intensity = 1;
+      else if (ct === 2) intensity = 2;
+      else if (ct >= 3 && ct <= 4) intensity = 3;
+      else if (ct > 4) intensity = 4;
+      row.push(intensity);
+    }
+    heatmap.push(row);
+  }
+
+  return { streak, avgConfidence, thisWeekAvg, diff, chartData, heatmap, totalSessions: sessions.length, thisWeekCount };
+}
 
 export default function HistoryPage() {
-  const { sessions } = useStudySync();
+  const { sessions, isLoadingSessions } = useStudySync();
   const [period, setPeriod] = useState<"Today" | "Weekly" | "Monthly">("Weekly");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 10;
 
-  const heatmap = useMemo(() => generateHeatmap(), []);
+  const { streak, avgConfidence, thisWeekAvg, diff, chartData, heatmap, totalSessions, thisWeekCount } = useMemo(() => calculateAnalytics(sessions), [sessions]);
 
-  // Demo sessions if no real data
-  const displaySessions = sessions.length > 0 ? sessions : [
-    { id: "1", timestamp: new Date(), focus: 92, fatigue: 15, complexity: 60, duration: 45, category: "Sedang", confidence: 87 },
-    { id: "2", timestamp: new Date(Date.now() - 86400000), focus: 78, fatigue: 45, complexity: 50, duration: 90, category: "Panjang", confidence: 74 },
-    { id: "3", timestamp: new Date(Date.now() - 172800000), focus: 45, fatigue: 80, complexity: 85, duration: 20, category: "Pendek", confidence: 52 },
-  ];
-
-  const filtered = displaySessions.filter((s) =>
+  const filtered = sessions.filter((s) =>
     s.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
     s.duration.toString().includes(searchTerm)
   );
@@ -48,7 +126,7 @@ export default function HistoryPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const paginatedSessions = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
 
-  const maxChart = Math.max(...chartData.map((d) => d.value));
+  const maxChart = Math.max(...chartData.map((d) => d.value), 10); // ensure we don't divide by 0
   const chartWidth = 600;
   const chartHeight = 160;
 
@@ -85,6 +163,7 @@ export default function HistoryPage() {
             <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Review your historical focus patterns and AI-driven efficiency metrics.</p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
+            {isLoadingSessions && <Loader2 className="animate-spin" size={18} color="var(--accent-blue)" style={{ alignSelf: "center", marginRight: "1rem" }} />}
             <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", cursor: "pointer", fontSize: "0.82rem", color: "var(--text-primary)", fontWeight: 500 }}>
               <FileText size={14} /> Export PDF
             </button>
@@ -113,15 +192,15 @@ export default function HistoryPage() {
           <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "1.5rem", border: "1px solid var(--border-color)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
               <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Current Streak</span>
-              <Flame size={18} color="#EF4444" />
+              <Flame size={18} color={streak > 0 ? "#EF4444" : "var(--text-muted)"} />
             </div>
             <p style={{ fontSize: "2.5rem", fontWeight: 700, fontFamily: "'Playfair Display', serif", marginBottom: 4 }}>
-              <span style={{ color: "var(--accent-blue)" }}>12</span> <span style={{ fontSize: "1rem", fontWeight: 500 }}>Days</span>
+              <span style={{ color: "var(--accent-blue)" }}>{streak}</span> <span style={{ fontSize: "1rem", fontWeight: 500 }}>Days</span>
             </p>
             <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2, marginBottom: 8, marginTop: 12 }}>
-              <div style={{ width: "80%", height: "100%", background: "var(--accent-blue)", borderRadius: 2 }} />
+              <div style={{ width: `${Math.min((streak % 7) / 7 * 100, 100)}%`, height: "100%", background: "var(--accent-blue)", borderRadius: 2, transition: "width 0.5s" }} />
             </div>
-            <p style={{ fontSize: "0.75rem", color: "var(--accent-blue)" }}>3 days until your next milestone</p>
+            <p style={{ fontSize: "0.75rem", color: "var(--accent-blue)" }}>{7 - (streak % 7)} days until your next milestone</p>
           </div>
 
           {/* Productivity Trend */}
@@ -193,26 +272,31 @@ export default function HistoryPage() {
           className="grid-stats-3" style={{ marginBottom: "1.5rem" }}
         >
           <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.25rem", border: "1px solid var(--border-color)" }}>
-            <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 4 }}>Productivity Score</p>
-            <p style={{ fontSize: "2rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>88% <span style={{ fontSize: "0.75rem", color: "var(--success)", fontWeight: 500, fontFamily: "Inter" }}>+4.2</span></p>
-            <p style={{ fontSize: "0.72rem", color: "var(--accent-blue)", marginTop: 4 }}>↗ Above average this week</p>
+            <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 4 }}>Weekly Avg Focus</p>
+            <p style={{ fontSize: "2rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>{thisWeekAvg}% <span style={{ fontSize: "0.75rem", color: diff >= 0 ? "var(--success)" : "var(--danger)", fontWeight: 500, fontFamily: "Inter" }}>{diff >= 0 ? `+${diff}` : diff}</span></p>
+            <p style={{ fontSize: "0.72rem", color: "var(--accent-blue)", marginTop: 4 }}>{diff >= 0 ? "↗ Above" : "↘ Below"} average from last week</p>
           </div>
           <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.25rem", border: "1px solid var(--border-color)" }}>
-            <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 4 }}>Session Completion</p>
-            <p style={{ fontSize: "2rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>24<span style={{ fontWeight: 400, color: "var(--text-muted)" }}>/28</span></p>
+            <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", marginBottom: 4 }}>Focus Efficiency (Conf.)</p>
+            <p style={{ fontSize: "2rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>{avgConfidence}%</p>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8 }}>
               <div style={{ flex: 1, height: 4, background: "var(--border-color)", borderRadius: 2 }}>
-                <div style={{ width: "85%", height: "100%", background: "var(--accent-blue)", borderRadius: 2 }} />
+                <div style={{ width: `${avgConfidence}%`, height: "100%", background: "var(--accent-blue)", borderRadius: 2 }} />
               </div>
-              <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>85%</span>
+              <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{totalSessions} Session{totalSessions !== 1 ? 's' : ''}</span>
             </div>
           </div>
           <div style={{ background: "var(--accent-blue)", borderRadius: "var(--radius-lg)", padding: "1.25rem", color: "white" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
               <Sparkles size={14} />
-              <span style={{ fontSize: "0.72rem", fontWeight: 600, textTransform: "uppercase" }}>AI Recommendation</span>
+              <span style={{ fontSize: "0.72rem", fontWeight: 600, textTransform: "uppercase" }}>AI Insights</span>
             </div>
-            <p style={{ fontSize: "0.82rem", lineHeight: 1.6 }}>Based on your history, you are 24% more focused during evening sessions for Complexity Level 8+ tasks.</p>
+            <p style={{ fontSize: "0.82rem", lineHeight: 1.6 }}>
+              {totalSessions === 0 
+                ? "Start studying to get personalized insights from the Mamdani engine."
+                : `You've completed ${thisWeekCount} session${thisWeekCount !== 1 ? 's' : ''} in the last 7 days. Your focus peaks around an average of ${thisWeekAvg}%.`
+              }
+            </p>
           </div>
         </motion.div>
 
@@ -239,40 +323,62 @@ export default function HistoryPage() {
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
-                    {["Timestamp", "Category", "Focus", "Fatigue", "Complexity", "Rec. Duration", "Action"].map((h) => (
+                    {["Status", "Timestamp", "Category", "Focus", "Fatigue", "Complexity", "Rec. Duration", "Action"].map((h) => (
                       <th key={h} style={{ padding: "12px 16px", fontSize: "0.68rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", textAlign: "left", fontFamily: "Inter, sans-serif" }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedSessions.map((session) => (
-                    <tr key={session.id} style={{ borderBottom: "1px solid var(--border-light)" }}>
-                      <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: "var(--text-primary)" }}>{formatTimestamp(session.timestamp)}</td>
-                      <td style={{ padding: "14px 16px" }}>
-                        <span style={{ padding: "3px 12px", borderRadius: 16, fontSize: "0.72rem", fontWeight: 600, background: `${getCatColor(session.category)}18`, color: getCatColor(session.category) }}>{session.category}</span>
-                      </td>
-                      <td style={{ padding: "14px 16px", fontSize: "0.82rem" }}>
-                        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                          {session.focus >= 70 ? <Eye size={12} color="var(--success)" /> : session.focus >= 40 ? <Eye size={12} color="var(--warning)" /> : <AlertTriangle size={12} color="var(--danger)" />}
-                          {session.focus}%
-                        </span>
-                      </td>
-                      <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: session.fatigue >= 70 ? "var(--danger)" : "var(--text-secondary)" }}>
-                        {session.fatigue >= 70 ? "High" : session.fatigue >= 40 ? "Medium" : "Low"}
-                      </td>
-                      <td style={{ padding: "14px 16px" }}>
-                        <div style={{ display: "flex", gap: 2 }}>
-                          {[...Array(5)].map((_, i) => (
-                            <div key={i} style={{ width: 6, height: 14, borderRadius: 1, background: i < Math.ceil(session.complexity / 20) ? "var(--accent-blue)" : "var(--border-color)" }} />
-                          ))}
+                  {paginatedSessions.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} style={{ padding: "3rem", textAlign: "center" }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+                          {isLoadingSessions ? (
+                             <Loader2 size={32} className="animate-spin" color="var(--accent-blue)" />
+                          ) : (
+                             <>
+                               <BrainCircuit size={40} color="var(--border-color)" />
+                               <span style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>No study sessions found yet. Go to Calculator to start your first session.</span>
+                             </>
+                          )}
                         </div>
                       </td>
-                      <td style={{ padding: "14px 16px", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)" }}>{session.duration} min</td>
-                      <td style={{ padding: "14px 16px" }}>
-                        <button style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)" }}><MoreVertical size={16} /></button>
-                      </td>
                     </tr>
-                  ))}
+                  ) : (
+                    paginatedSessions.map((session) => (
+                      <tr key={session.id} style={{ borderBottom: "1px solid var(--border-light)" }}>
+                        <td style={{ padding: "14px 16px", fontSize: "0.82rem" }}>
+                          {session.syncStatus === "syncing" && <RefreshCw size={14} color="var(--accent-blue)" className="animate-spin" title="Syncing" />}
+                          {session.syncStatus === "synced" && <Cloud size={14} color="var(--success, #10B981)" title="Synced with cloud" />}
+                          {session.syncStatus === "failed" && <CloudOff size={14} color="var(--danger, #EF4444)" title="Sync failed" />}
+                        </td>
+                        <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: "var(--text-primary)" }}>{formatTimestamp(session.timestamp)}</td>
+                        <td style={{ padding: "14px 16px" }}>
+                          <span style={{ padding: "3px 12px", borderRadius: 16, fontSize: "0.72rem", fontWeight: 600, background: `${getCatColor(session.category)}18`, color: getCatColor(session.category) }}>{session.category}</span>
+                        </td>
+                        <td style={{ padding: "14px 16px", fontSize: "0.82rem" }}>
+                          <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                            {session.focus >= 70 ? <Eye size={12} color="var(--success)" /> : session.focus >= 40 ? <Eye size={12} color="var(--warning)" /> : <AlertTriangle size={12} color="var(--danger)" />}
+                            {session.focus}%
+                          </span>
+                        </td>
+                        <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: session.fatigue >= 70 ? "var(--danger)" : "var(--text-secondary)" }}>
+                          {session.fatigue >= 70 ? "High" : session.fatigue >= 40 ? "Medium" : "Low"}
+                        </td>
+                        <td style={{ padding: "14px 16px" }}>
+                          <div style={{ display: "flex", gap: 2 }}>
+                            {[...Array(5)].map((_, i) => (
+                              <div key={i} style={{ width: 6, height: 14, borderRadius: 1, background: i < Math.ceil(session.complexity / 20) ? "var(--accent-blue)" : "var(--border-color)" }} />
+                            ))}
+                          </div>
+                        </td>
+                        <td style={{ padding: "14px 16px", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)" }}>{session.duration} min</td>
+                        <td style={{ padding: "14px 16px" }}>
+                          <button style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)" }}><MoreVertical size={16} /></button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
