@@ -1,36 +1,357 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StudySync
 
-## Getting Started
+AI-Powered Study Duration Recommendation System using Fuzzy Logic Mamdani
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Supabase](https://img.shields.io/badge/Supabase-Backend-green)
+![Fuzzy Logic](https://img.shields.io/badge/Fuzzy-Mamdani-orange)
+
+## 📖 About
+
+StudySync adalah aplikasi rekomendasi durasi belajar berbasis AI yang menggunakan metode Fuzzy Logic Mamdani untuk membantu pelajar menentukan durasi belajar yang optimal berdasarkan kondisi belajar mereka saat ini.
+
+Sistem mempertimbangkan tiga parameter utama:
+
+* Tingkat Fokus
+* Tingkat Kelelahan
+* Kompleksitas Materi
+
+Kemudian memproses 27 aturan fuzzy untuk menghasilkan rekomendasi durasi belajar yang personal dan adaptif.
+
+---
+
+## 🎯 Features
+
+### 📊 Smart Study Recommendation
+
+Input:
+
+* Tingkat Fokus (0–100)
+* Tingkat Kelelahan (0–100)
+* Kompleksitas Materi (0–100)
+
+Output:
+
+* Durasi Belajar Optimal
+* Kategori Durasi
+* Tingkat Kepercayaan AI
+* Aturan Fuzzy Aktif
+* Derajat Keanggotaan
+
+---
+
+### 🧠 Fuzzy Logic Visualization
+
+* Membership Function Visualization
+* Rule Evaluation Display
+* Active Rule Inspector
+* Centroid Defuzzification
+* Mamdani Inference Process
+
+---
+
+### 📈 Analytics Dashboard
+
+* Tren Produktivitas
+* Konsistensi Belajar
+* Peta Aktivitas Belajar
+* Efisiensi Fokus
+* Riwayat Sesi
+
+---
+
+### ⏱️ Study Session Timer
+
+* Mulai Sesi Belajar
+* Jeda & Lanjutkan
+* Reset Timer
+* Tracking Sesi
+
+---
+
+### 🔐 Authentication
+
+* Login
+* Registrasi
+* Session Management
+* Protected Routes
+* User Profile Synchronization
+
+Powered by Supabase Authentication.
+
+---
+
+## 🏗️ System Architecture
+
+```text
+User
+ ↓
+Next.js Frontend
+ ↓
+Server Actions
+ ↓
+Fuzzy Logic Engine
+ ↓
+Supabase Database
+```
+
+### Frontend
+
+* Next.js 15 App Router
+* TypeScript
+* Tailwind CSS
+* Shadcn UI
+* Framer Motion
+* Recharts
+
+### Backend
+
+* Supabase
+* PostgreSQL
+* Row Level Security (RLS)
+* Server Actions
+
+---
+
+## 🧠 Fuzzy Logic Implementation
+
+### Input Variables
+
+#### Tingkat Fokus
+
+* Rendah
+* Sedang
+* Tinggi
+
+#### Tingkat Kelelahan
+
+* Rendah
+* Sedang
+* Tinggi
+
+#### Kompleksitas Materi
+
+* Mudah
+* Sedang
+* Sulit
+
+---
+
+### Output Variable
+
+Durasi Belajar:
+
+* Sangat Pendek
+* Pendek
+* Sedang
+* Panjang
+* Sangat Panjang
+
+Range:
+
+```text
+15 - 150 Menit
+```
+
+---
+
+### Inference Method
+
+Metode yang digunakan:
+
+```text
+Mamdani Fuzzy Inference System
+```
+
+Operator:
+
+```text
+AND          = MIN
+Aggregation  = MAX
+Defuzzifikasi = Centroid
+```
+
+Jumlah Rule:
+
+```text
+27 Rules
+```
+
+---
+
+## 🗄️ Database Schema
+
+### profiles
+
+```sql
+id UUID
+email TEXT
+full_name TEXT
+created_at TIMESTAMP
+```
+
+### study_sessions
+
+```sql
+id UUID
+user_id UUID
+focus_level INTEGER
+fatigue_level INTEGER
+complexity_level INTEGER
+recommended_duration INTEGER
+category TEXT
+confidence_score FLOAT
+created_at TIMESTAMP
+```
+
+### analytics
+
+```sql
+id UUID
+user_id UUID
+focus_efficiency FLOAT
+productivity_score FLOAT
+study_streak INTEGER
+weekly_hours FLOAT
+```
+
+---
+
+## 🚀 Installation
+
+Clone repository:
+
+```bash
+git clone <repository-url>
+```
+
+Masuk ke folder project:
+
+```bash
+cd studysync
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+## ⚙️ Environment Variables
+
+Buat file:
+
+```bash
+.env.local
+```
+
+Isi dengan konfigurasi Supabase:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+---
+
+## ▶️ Running Locally
+
+Jalankan development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📂 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src/
+│
+├── app/
+├── components/
+├── hooks/
+├── lib/
+│   ├── fuzzy-engine/
+│   └── supabase/
+├── types/
+├── utils/
+└── features/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧪 Testing
 
-## Deploy on Vercel
+Project menggunakan pengujian Black Box untuk:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Authentication
+* Fuzzy Recommendation Engine
+* Session Management
+* History Tracking
+* Analytics Dashboard
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Total:
+
+```text
+20 Test Cases
+```
+
+---
+
+## 📚 Academic Purpose
+
+Project ini dikembangkan sebagai implementasi metode Fuzzy Logic Mamdani pada sistem rekomendasi durasi belajar berbasis web.
+
+Tujuan utama:
+
+* Menerapkan konsep Fuzzy Logic dalam kasus nyata
+* Membantu personalisasi durasi belajar
+* Menyediakan visualisasi proses inferensi fuzzy
+* Menjadi media pembelajaran konsep Mamdani Fuzzy Inference System
+
+---
+
+## 👨‍💻 Technology Stack
+
+Frontend:
+
+* Next.js
+* TypeScript
+* Tailwind CSS
+* Shadcn UI
+* Framer Motion
+
+Backend:
+
+* Supabase
+* PostgreSQL
+
+Visualization:
+
+* Recharts
+
+Authentication:
+
+* Supabase Auth
+
+Deployment:
+
+* Vercel
+
+---
+
+## 📄 License
+
+This project is developed for educational and academic purposes.
