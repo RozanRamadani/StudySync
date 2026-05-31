@@ -4,49 +4,49 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Timer, Brain, BookOpen, Repeat, Layers, Bookmark, CheckCircle2 } from "lucide-react";
 
-const categories = ["All Methods", "Retention", "Time Management", "Memory"];
+const categories = ["Semua Metode", "Retensi", "Manajemen Waktu", "Daya Ingat"];
 
 const studyMethods = [
   {
-    id: 1, icon: <Timer size={22} />, title: "Pomodoro Technique", badge: "TOP PICK",
-    description: "A time management method that uses a timer to break work into intervals, traditionally 25 minutes in length.",
-    tags: ["Beginner", "25-min cycles"], effectiveness: 85, category: "Time Management",
+    id: 1, icon: <Timer size={22} />, title: "Teknik Pomodoro", badge: "PILIHAN UTAMA",
+    description: "Metode manajemen waktu yang menggunakan pengatur waktu untuk membagi pekerjaan menjadi jeda, biasanya berdurasi 25 menit.",
+    tags: ["Pemula", "Siklus 25-menit"], effectiveness: 85, category: "Manajemen Waktu",
   },
   {
-    id: 2, icon: <Brain size={22} />, title: "Deep Work",
-    description: "Professional activities performed in a state of distraction-free concentration that push your cognitive capabilities.",
-    tags: ["Advanced", "90+ min sessions"], effectiveness: 95, category: "Time Management",
+    id: 2, icon: <Brain size={22} />, title: "Fokus Mendalam",
+    description: "Tingkat fokus profesional yang dilakukan tanpa gangguan untuk mendorong kemampuan kognitif Anda.",
+    tags: ["Lanjutan", "Sesi 90+ menit"], effectiveness: 95, category: "Manajemen Waktu",
   },
   {
-    id: 3, icon: <BookOpen size={22} />, title: "Active Recall", badge: "RECOMMENDED",
-    description: "Testing yourself as you learn by actively retrieving information from memory instead of passively reviewing notes.",
-    tags: ["Intermediate", "Memory hack"], effectiveness: 98, category: "Retention",
+    id: 3, icon: <BookOpen size={22} />, title: "Pengingat Aktif", badge: "DIREKOMENDASIKAN",
+    description: "Menguji diri sendiri dengan mengambil informasi secara aktif dari ingatan alih-alih cuma membaca ulang catatan secara pasif.",
+    tags: ["Menengah", "Trik Ingatan"], effectiveness: 98, category: "Retensi",
   },
   {
     id: 4, icon: <Layers size={22} />, title: "The Feynman Technique", image: true,
-    description: "Named after Nobel Prize-winning physicist Richard Feynman, this method involves explaining a concept in simple terms as if teaching it to a child to identify gaps in your knowledge.",
-    tags: ["All Levels", "Conceptual Mastery"], effectiveness: 92, category: "Retention",
+    description: "Berasal dari nama fisikawan pemenang Hadiah Nobel Richard Feynman, metode ini menjelaskan konsep dengan menggunakan bahasa yang lebih simpel untuk melihat apa yang kurang dari konsep yang di pelajari.",
+    tags: ["Semua Level", "Penguasaan Konsep"], effectiveness: 92, category: "Retensi",
   },
   {
-    id: 5, icon: <Repeat size={22} />, title: "Spaced Repetition",
-    description: "Reviewing information at increasing intervals to combat the forgetting curve and solidify long-term retention.",
-    tags: ["Long-term", "Consistent Effort"], effectiveness: 97, category: "Memory",
+    id: 5, icon: <Repeat size={22} />, title: "Pengulangan Berjarak",
+    description: "Menyampaikan ulang informasi dengan interval yang lebih panjang untuk memerangi kurva melupakan untuk ingatan jangka panjang.",
+    tags: ["Jangka panjang", "Usaha Konsisten"], effectiveness: 97, category: "Daya Ingat",
   },
   {
     id: 6, icon: <Brain size={22} />, title: "Blurting Method",
-    description: "Writing everything you know about a topic from memory, then checking against notes to identify knowledge gaps.",
-    tags: ["Beginner", "Quick assessment"], effectiveness: 82, category: "Memory",
+    description: "Menulis ulang semua hal yang teringat di kepala dari suatu topik, kemudian menyesuaikannya bersama catatan sebenarnya.",
+    tags: ["Pemula", "Evaluasi cepat"], effectiveness: 82, category: "Daya Ingat",
   },
 ];
 
 export default function StudyTipsPage() {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All Methods");
+  const [activeCategory, setActiveCategory] = useState("Semua Metode");
   const [bookmarked, setBookmarked] = useState<number[]>([]);
 
   const filtered = studyMethods.filter((m) => {
     const matchSearch = m.title.toLowerCase().includes(search.toLowerCase()) || m.description.toLowerCase().includes(search.toLowerCase());
-    const matchCategory = activeCategory === "All Methods" || m.category === activeCategory;
+    const matchCategory = activeCategory === "Semua Metode" || m.category === activeCategory;
     return matchSearch && matchCategory;
   });
 
@@ -59,9 +59,9 @@ export default function StudyTipsPage() {
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "2.5rem", marginBottom: 8 }}>Master Your Learning</h1>
+          <h1 style={{ fontSize: "2.5rem", marginBottom: 8 }}>Kuasai Pembelajaran Anda</h1>
           <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.7, maxWidth: 550 }}>
-            Discover evidence-based methodologies curated by our AI to transform your academic potential. Science-backed techniques for the modern scholar.
+            Temukan metodologi berbasis bukti yang dikurasi oleh AI kami untuk mengubah potensi akademis Anda. Teknik yang didukung sains untuk pelajar modern.
           </p>
         </motion.div>
 
@@ -71,7 +71,7 @@ export default function StudyTipsPage() {
         >
           <div style={{ flex: 1, minWidth: 250, display: "flex", alignItems: "center", gap: 10, background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: "var(--radius-md)", padding: "10px 16px" }}>
             <Search size={16} color="var(--text-muted)" />
-            <input type="text" placeholder="Search methods (e.g. Memory, Focus...)" value={search} onChange={(e) => setSearch(e.target.value)}
+            <input type="text" placeholder="Cari metode (contoh. Memori, Fokus...)" value={search} onChange={(e) => setSearch(e.target.value)}
               style={{ flex: 1, border: "none", outline: "none", background: "none", fontSize: "0.85rem", color: "var(--text-primary)" }}
             />
           </div>
@@ -124,7 +124,7 @@ export default function StudyTipsPage() {
 
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.72rem", color: "var(--text-muted)", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    <span>Effectiveness</span>
+                    <span>Tingkat Efektivitas</span>
                     <span>{method.effectiveness}%</span>
                   </div>
                   <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2 }}>
@@ -145,26 +145,26 @@ export default function StudyTipsPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem", alignItems: "center" }} className="grid-2col">
             <div>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--bg-secondary)", padding: "4px 14px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 600, color: "var(--accent-blue)", marginBottom: 16, border: "1px solid var(--border-color)" }}>
-                ✨ AI Generated Insights
+                ✨ Wawasan Generasi AI
               </span>
-              <h2 style={{ fontSize: "2rem", marginBottom: 12 }}>Daily Study Insights</h2>
+              <h2 style={{ fontSize: "2rem", marginBottom: 12 }}>Wawasan Belajar Harian</h2>
               <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 24 }}>
-                Every morning, our AI analyzes academic trends and cognitive science research to provide you with one actionable study tip to boost your efficiency.
+                Setiap pagi, AI kami menganalisis tren akademis dan riset ilmu kognitif untuk memberikan satu langkah praktis untuk meningkatkan efisiensi Anda.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
-                {["Personalized tips based on your major and study habits.", "Weekly summaries of your focus and retention metrics."].map((item) => (
+                {["Saran terpersonalisasi berdasarkan jurusan dan kebiasaan belajar Anda.", "Rangkuman mingguan skor fokus dan matriks memori Anda."].map((item) => (
                   <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.85rem", color: "var(--text-secondary)" }}>
                     <CheckCircle2 size={16} color="var(--accent-blue)" /> {item}
                   </div>
                 ))}
               </div>
               <div style={{ display: "flex", gap: 8 }}>
-                <input type="email" placeholder="Enter your email"
+                <input type="email" placeholder="Masukkan email Anda"
                   style={{ flex: 1, padding: "10px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", fontSize: "0.85rem", color: "var(--text-primary)", outline: "none" }}
                 />
-                <button style={{ padding: "10px 20px", background: "var(--accent-blue)", color: "white", borderRadius: "var(--radius-md)", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>Subscribe Now</button>
+                <button style={{ padding: "10px 20px", background: "var(--accent-blue)", color: "white", borderRadius: "var(--radius-md)", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>Berlangganan Sekarang</button>
               </div>
-              <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 8 }}>Join 15,000+ students leveling up their learning game.</p>
+              <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 8 }}>Bergabung bersama 15.000+ pelajar lainnya untuk membawa performa pembelajaran kalian ke level selanjutnya.</p>
             </div>
             <div style={{ background: "linear-gradient(135deg, #d4c5a9, #b8a88a)", borderRadius: "var(--radius-xl)", height: 300, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span style={{ fontSize: "4rem" }}>💻</span>

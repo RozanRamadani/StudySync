@@ -119,8 +119,8 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
               )
             );
             toast({
-              title: "Session Saved",
-              description: "Your study session was successfully saved to the cloud.",
+              title: "Sesi Tersimpan",
+              description: "Sesi belajar Anda berhasil disimpan ke cloud.",
               type: "success"
             });
           } else {
@@ -135,11 +135,11 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
             )
           );
           toast({
-            title: "Save Failed",
-            description: "Could not save your session to the database.",
+            title: "Gagal Menyimpan",
+            description: "Tidak dapat menyimpan sesi Anda ke database.",
             type: "error",
             action: {
-              label: "Retry",
+              label: "Coba Lagi",
               onClick: () => retrySessionRef(newSession),
             }
           });
@@ -171,8 +171,8 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
             )
           );
           toast({
-            title: "Retry Successful",
-            description: "Your study session was successfully saved.",
+            title: "Coba Lagi Berhasil",
+            description: "Sesi belajar Anda berhasil disimpan.",
             type: "success"
           });
         } else {
@@ -185,11 +185,11 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
           prev.map((s) => (s.id === session.id ? { ...s, syncStatus: "failed" } : s))
         );
         toast({
-          title: "Retry Failed",
-          description: "Still could not save your session.",
+          title: "Coba Lagi Gagal",
+          description: "Masih tidak dapat menyimpan sesi Anda.",
           type: "error",
           action: {
-            label: "Try Again",
+            label: "Coba Lagi",
             onClick: () => retrySessionRef(session),
           }
         });

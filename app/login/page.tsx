@@ -25,8 +25,8 @@ export default function LoginPage() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "1.8rem", marginBottom: "0.5rem", fontFamily: "'Playfair Display', serif" }}>Welcome back</h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>Log in to access your AI study insights.</p>
+          <h1 style={{ fontSize: "1.8rem", marginBottom: "0.5rem", fontFamily: "'Playfair Display', serif" }}>Selamat Datang Kembali</h1>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>Masuk untuk melihat analitik belajar AI Anda.</p>
         </div>
 
         {state?.error && (
@@ -38,7 +38,7 @@ export default function LoginPage() {
 
         <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Email Address</label>
+            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Alamat Email</label>
             <div style={{ position: "relative" }}>
               <Mail size={18} color="var(--text-muted)" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
               <input 
@@ -61,7 +61,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Password</label>
+            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Kata Sandi</label>
             <div style={{ position: "relative" }}>
               <Lock size={18} color="var(--text-muted)" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
               <input 
@@ -104,15 +104,15 @@ export default function LoginPage() {
               opacity: isPending ? 0.7 : 1,
             }}
           >
-            {isPending ? <Loader2 size={18} className="animate-spin" /> : "Sign in"}
+            {isPending ? <Loader2 size={18} className="animate-spin" /> : "Masuk"}
             {!isPending && <ArrowRight size={16} />}
           </button>
         </form>
 
         <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
-          Don&apos;t have an account?{" "}
+          Belum punya akun?{" "}
           <Link href="/register" style={{ color: "var(--accent-blue)", fontWeight: 600, textDecoration: "none" }}>
-            Sign up
+            Daftar
           </Link>
         </p>
       </motion.div>

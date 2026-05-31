@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { FileText, Download, Search, Filter, Flame, TrendingUp, ChevronLeft, ChevronRight, Sparkles, MoreVertical, AlertTriangle, Eye, Loader2, BrainCircuit, Cloud, CloudOff, RefreshCw } from "lucide-react";
 import { useStudySync, StudySession } from "@/components/providers/StudySyncProvider";
 
-const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const weekDays = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
 
 const heatmapColors = ["var(--bg-primary)", "#DBEAFE", "#93C5FD", "#3B82F6", "#1D4ED8"];
 
@@ -70,7 +70,7 @@ function calculateAnalytics(sessions: StudySession[]) {
 
   // Chart Data (Last 7 days, ascending)
   const chartData = [];
-  const standardDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const standardDays = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
   for (let i = 6; i >= 0; i--) {
     const dVal = todayVal - (i * oneDay);
     const dDate = new Date(dVal);
@@ -111,7 +111,7 @@ function calculateAnalytics(sessions: StudySession[]) {
 
 export default function HistoryPage() {
   const { sessions, isLoadingSessions } = useStudySync();
-  const [period, setPeriod] = useState<"Today" | "Weekly" | "Monthly">("Weekly");
+  const [period, setPeriod] = useState<"Hari Ini" | "Mingguan" | "Bulanan">("Mingguan");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 10;
@@ -146,9 +146,9 @@ export default function HistoryPage() {
   function formatTimestamp(d: Date) {
     const now = new Date();
     const diff = now.getTime() - d.getTime();
-    if (diff < 86400000) return `Today, ${d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-    if (diff < 172800000) return `Yesterday, ${d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + `, ${d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`;
+    if (diff < 86400000) return `Hari Ini, ${d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}`;
+    if (diff < 172800000) return `Kemarin, ${d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}`;
+    return d.toLocaleDateString("id-ID", { month: "short", day: "numeric" }) + `, ${d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}`;
   }
 
   return (
@@ -159,23 +159,23 @@ export default function HistoryPage() {
           style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}
         >
           <div>
-            <h1 style={{ fontSize: "2.2rem", marginBottom: 4 }}>Learning Analytics</h1>
-            <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Review your historical focus patterns and AI-driven efficiency metrics.</p>
+            <h1 style={{ fontSize: "2.2rem", marginBottom: 4 }}>Analitik Belajar</h1>
+            <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Tinjau pola fokus historis Anda dan metrik efisiensi berbasis AI.</p>
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             {isLoadingSessions && <Loader2 className="animate-spin" size={18} color="var(--accent-blue)" style={{ alignSelf: "center", marginRight: "1rem" }} />}
             <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", cursor: "pointer", fontSize: "0.82rem", color: "var(--text-primary)", fontWeight: 500 }}>
-              <FileText size={14} /> Export PDF
+              <FileText size={14} /> Ekspor PDF
             </button>
             <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: "var(--radius-md)", border: "none", background: "var(--accent-blue)", color: "white", cursor: "pointer", fontSize: "0.82rem", fontWeight: 600 }}>
-              <Download size={14} /> Download Report
+              <Download size={14} /> Unduh Laporan
             </button>
           </div>
         </motion.div>
 
         {/* Period Tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: "1.5rem" }}>
-          {(["Today", "Weekly", "Monthly"] as const).map((p) => (
+          {(["Hari Ini", "Mingguan", "Bulanan"] as const).map((p) => (
             <button key={p} onClick={() => setPeriod(p)}
               style={{ padding: "6px 18px", borderRadius: 20, fontSize: "0.8rem", fontWeight: 500, border: "1px solid var(--border-color)", cursor: "pointer", background: period === p ? "var(--accent-blue)" : "transparent", color: period === p ? "white" : "var(--text-secondary)" }}
             >
@@ -191,24 +191,24 @@ export default function HistoryPage() {
           {/* Streak Card */}
           <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "1.5rem", border: "1px solid var(--border-color)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-              <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Current Streak</span>
+              <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Konsistensi Belajar</span>
               <Flame size={18} color={streak > 0 ? "#EF4444" : "var(--text-muted)"} />
             </div>
             <p style={{ fontSize: "2.5rem", fontWeight: 700, fontFamily: "'Playfair Display', serif", marginBottom: 4 }}>
-              <span style={{ color: "var(--accent-blue)" }}>{streak}</span> <span style={{ fontSize: "1rem", fontWeight: 500 }}>Days</span>
+              <span style={{ color: "var(--accent-blue)" }}>{streak}</span> <span style={{ fontSize: "1rem", fontWeight: 500 }}>Hari</span>
             </p>
             <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2, marginBottom: 8, marginTop: 12 }}>
               <div style={{ width: `${Math.min((streak % 7) / 7 * 100, 100)}%`, height: "100%", background: "var(--accent-blue)", borderRadius: 2, transition: "width 0.5s" }} />
             </div>
-            <p style={{ fontSize: "0.75rem", color: "var(--accent-blue)" }}>{7 - (streak % 7)} days until your next milestone</p>
+            <p style={{ fontSize: "0.75rem", color: "var(--accent-blue)" }}>{7 - (streak % 7)} hari menuju pencapaian selanjutnya</p>
           </div>
 
           {/* Productivity Trend */}
           <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "1.5rem", border: "1px solid var(--border-color)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-              <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Productivity Trend</span>
+              <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Tren Produktivitas</span>
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.72rem", color: "var(--accent-blue)" }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-blue)" }} /> Focus Score
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-blue)" }} /> Skor Fokus
               </div>
             </div>
             <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 20}`} style={{ width: "100%" }}>
@@ -243,9 +243,9 @@ export default function HistoryPage() {
           style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "1.5rem", border: "1px solid var(--border-color)", marginBottom: "1.5rem" }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-            <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Weekly Activity Heatmap</span>
+            <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>Heatmap Aktivitas Mingguan</span>
             <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "0.7rem", color: "var(--text-muted)" }}>
-              Less {heatmapColors.map((c, i) => <span key={i} style={{ width: 14, height: 14, borderRadius: 3, background: c, border: i === 0 ? "1px solid var(--border-color)" : "none" }} />)} More
+              Kurang {heatmapColors.map((c, i) => <span key={i} style={{ width: 14, height: 14, borderRadius: 3, background: c, border: i === 0 ? "1px solid var(--border-color)" : "none" }} />)} Lebih
             </div>
           </div>
           {/* Day labels */}
@@ -303,16 +303,16 @@ export default function HistoryPage() {
         {/* Session Records */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
-            <h2 style={{ fontSize: "1.3rem" }}>Session Records</h2>
+            <h2 style={{ fontSize: "1.3rem" }}>Riwayat Sesi</h2>
             <div style={{ display: "flex", gap: 8 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: "var(--radius-md)", padding: "6px 14px" }}>
                 <Search size={14} color="var(--text-muted)" />
-                <input type="text" placeholder="Search sessions..." value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                <input type="text" placeholder="Cari sesi..." value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                   style={{ border: "none", outline: "none", background: "none", fontSize: "0.82rem", color: "var(--text-primary)", width: 140 }}
                 />
               </div>
               <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", cursor: "pointer", fontSize: "0.82rem", color: "var(--text-secondary)" }}>
-                <Filter size={14} /> Filter
+                <Filter size={14} /> Saring
               </button>
             </div>
           </div>
@@ -323,7 +323,7 @@ export default function HistoryPage() {
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 700 }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
-                    {["Status", "Timestamp", "Category", "Focus", "Fatigue", "Complexity", "Rec. Duration", "Action"].map((h) => (
+                    {["Status", "Waktu", "Kategori", "Fokus", "Lelah", "Kompleksitas", "Durasi Rek.", "Aksi"].map((h) => (
                       <th key={h} style={{ padding: "12px 16px", fontSize: "0.68rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", textAlign: "left", fontFamily: "Inter, sans-serif" }}>{h}</th>
                     ))}
                   </tr>
@@ -338,7 +338,7 @@ export default function HistoryPage() {
                           ) : (
                              <>
                                <BrainCircuit size={40} color="var(--border-color)" />
-                               <span style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>No study sessions found yet. Go to Calculator to start your first session.</span>
+                               <span style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>Belum ada sesi belajar. Pergi ke Kalkulator untuk memulai sesi pertama Anda.</span>
                              </>
                           )}
                         </div>
@@ -363,7 +363,7 @@ export default function HistoryPage() {
                           </span>
                         </td>
                         <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: session.fatigue >= 70 ? "var(--danger)" : "var(--text-secondary)" }}>
-                          {session.fatigue >= 70 ? "High" : session.fatigue >= 40 ? "Medium" : "Low"}
+                          {session.fatigue >= 70 ? "Tinggi" : session.fatigue >= 40 ? "Sedang" : "Rendah"}
                         </td>
                         <td style={{ padding: "14px 16px" }}>
                           <div style={{ display: "flex", gap: 2 }}>
@@ -385,7 +385,7 @@ export default function HistoryPage() {
 
             {/* Pagination */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderTop: "1px solid var(--border-color)" }}>
-              <span style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>Showing {(currentPage - 1) * perPage + 1}-{Math.min(currentPage * perPage, filtered.length)} of {filtered.length} sessions</span>
+              <span style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>Menampilkan {(currentPage - 1) * perPage + 1}-{Math.min(currentPage * perPage, filtered.length)} dari {filtered.length} sesi</span>
               <div style={{ display: "flex", gap: 4 }}>
                 <button onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1}
                   style={{ width: 32, height: 32, borderRadius: "var(--radius-sm)", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", cursor: currentPage === 1 ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", opacity: currentPage === 1 ? 0.4 : 1 }}

@@ -11,10 +11,10 @@ import { signout } from "@/app/actions/auth";
 import { useStudySync } from "@/components/providers/StudySyncProvider";
 
 const navItems = [
-  { href: "/calculator", label: "Calculator" },
-  { href: "/fuzzy-logic", label: "Fuzzy Logic" },
-  { href: "/study-tips", label: "Study Tips" },
-  { href: "/history", label: "History" },
+  { href: "/calculator", label: "Rekomendasi Belajar" },
+  { href: "/fuzzy-logic", label: "Logika Fuzzy" },
+  { href: "/study-tips", label: "Tips Belajar" },
+  { href: "/history", label: "Riwayat" },
 ];
 
 export function Navbar() {
@@ -169,7 +169,7 @@ export function Navbar() {
               color: "var(--text-secondary)",
               transition: "all 0.2s ease",
             }}
-            aria-label="Toggle theme"
+            aria-label="Ganti Tema"
           >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>
@@ -207,8 +207,8 @@ export function Navbar() {
                   color: "var(--danger, #EF4444)",
                   transition: "all 0.2s ease",
                 }}
-                title="Sign out"
-                aria-label="Sign out menu"
+                title="Keluar"
+                aria-label="Keluar"
               >
                 <LogOut size={18} />
               </button>
@@ -230,7 +230,7 @@ export function Navbar() {
               }}
             >
               <User size={16} />
-              Sign in
+              Masuk
             </Link>
           )}
 

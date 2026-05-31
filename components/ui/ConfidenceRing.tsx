@@ -39,7 +39,7 @@ export function ConfidenceRing({ value, size = 100 }: ConfidenceRingProps) {
           {value}%
         </motion.span>
         <span style={{ fontSize: size * 0.1, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
-          AI Conf.
+          Kep. AI
         </span>
       </div>
     </div>

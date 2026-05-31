@@ -9,11 +9,11 @@ import { ConfidenceRing } from "@/components/ui/ConfidenceRing";
 import { TimerModal } from "@/components/timer/TimerModal";
 
 const loadingSteps = [
-  "Analyzing focus intensity...",
-  "Evaluating fuzzy membership...",
-  "Applying Mamdani inference...",
-  "Calculating optimal duration...",
-  "Generating AI recommendation...",
+  "Menganalisis intensitas fokus...",
+  "Mengevaluasi fungsi keanggotaan fuzzy...",
+  "Menerapkan inferensi Mamdani...",
+  "Menghitung durasi optimal...",
+  "Menghasilkan rekomendasi AI...",
 ];
 
 export default function CalculatorPage() {
@@ -115,7 +115,7 @@ export default function CalculatorPage() {
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                   <Lightbulb size={18} />
-                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>AI Study Insights</span>
+                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>Wawasan Belajar AI</span>
                 </div>
                 <p style={{ fontSize: "0.85rem", opacity: 0.9, lineHeight: 1.6, fontStyle: "italic" }}>
                   &quot;{tips}&quot;
@@ -174,7 +174,7 @@ export default function CalculatorPage() {
               <div style={{ marginTop: "2rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "1rem" }}>
                   <BookOpen size={16} color="var(--accent-blue)" />
-                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>Membership Analytics</span>
+                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>Analisis Keanggotaan</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem" }}>
                   {[
@@ -202,7 +202,7 @@ export default function CalculatorPage() {
             >
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
                 <span style={{ background: "var(--accent-blue)", color: "white", padding: "2px 10px", borderRadius: 6, fontSize: "0.75rem", fontWeight: 700 }}>RULE #{strongestRule.id}</span>
-                <span style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.05em", color: "var(--text-muted)" }}>ACTIVE LOGIC PATH</span>
+                <span style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.05em", color: "var(--text-muted)" }}>JALUR LOGIKA AKTIF</span>
                 <span style={{ marginLeft: "auto", fontSize: "0.75rem", color: "var(--accent-blue)" }}>● Alpha: {strongestRule.strength.toFixed(2)}</span>
                 <span style={{ fontSize: "0.75rem", color: "var(--warning)" }}>● Inf: {result.confidence}%</span>
               </div>
@@ -219,9 +219,9 @@ export default function CalculatorPage() {
             <>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "1rem" }}>
                 {[
-                  { icon: <Zap size={22} color="var(--accent-blue)" />, value: `${Math.round(result.confidence * 0.95)}%`, label: "Focus Efficiency", bars: result.confidence },
-                  { icon: <Timer size={22} color="var(--accent-blue)" />, value: `${Math.max(5, Math.round(result.duration * 0.1))}m`, label: "Suggested Break", bars: 60 },
-                  { icon: <BookOpen size={22} color="var(--accent-blue)" />, value: result.duration >= 90 ? "Deep" : result.duration >= 50 ? "Moderate" : "Light", label: "Study Mode", bars: Math.min(100, result.duration) },
+                  { icon: <Zap size={22} color="var(--accent-blue)" />, value: `${Math.round(result.confidence * 0.95)}%`, label: "Efisiensi Fokus", bars: result.confidence },
+                  { icon: <Timer size={22} color="var(--accent-blue)" />, value: `${Math.max(5, Math.round(result.duration * 0.1))}m`, label: "Saran Istirahat", bars: 60 },
+                  { icon: <BookOpen size={22} color="var(--accent-blue)" />, value: result.duration >= 90 ? "Dalam" : result.duration >= 50 ? "Sedang" : "Ringan", label: "Mode Belajar", bars: Math.min(100, result.duration) },
                 ].map((card, i) => (
                   <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}
                     style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.25rem", border: "1px solid var(--border-color)", textAlign: "center" }}
@@ -243,7 +243,7 @@ export default function CalculatorPage() {
                 onClick={() => setShowTimer(true)}
                 style={{ width: "100%", padding: "18px", borderRadius: "var(--radius-lg)", background: "var(--accent-blue)", color: "white", border: "none", cursor: "pointer", fontSize: "1.05rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, fontFamily: "'Playfair Display', serif" }}
               >
-                <Play size={20} /> Start Study Session
+                <Play size={20} /> Mulai Sesi Belajar
               </motion.button>
             </>
           )}

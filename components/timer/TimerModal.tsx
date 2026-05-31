@@ -63,10 +63,10 @@ export function TimerModal({ duration, onClose }: TimerModalProps) {
         </button>
 
         <h2 style={{ fontSize: "1.3rem", marginBottom: 8, fontFamily: "'Playfair Display', serif" }}>
-          {completed ? "🎉 Session Complete!" : "Focus Session"}
+          {completed ? "🎉 Sesi Selesai!" : "Sesi Fokus"}
         </h2>
         <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "2rem" }}>
-          {completed ? "Great work! Take a well-deserved break." : `${duration} minute study session`}
+          {completed ? "Kerja bagus! Istirahatlah dengan tenang." : `${duration} menit sesi belajar`}
         </p>
 
         {/* Progress Ring */}
@@ -83,7 +83,7 @@ export function TimerModal({ duration, onClose }: TimerModalProps) {
             <span style={{ fontSize: "3rem", fontWeight: 700, fontFamily: "'Playfair Display', serif", color: "var(--text-primary)" }}>
               {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
             </span>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>remaining</span>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>tersisa</span>
           </div>
         </div>
 

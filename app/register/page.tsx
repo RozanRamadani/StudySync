@@ -25,8 +25,8 @@ export default function RegisterPage() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "1.8rem", marginBottom: "0.5rem", fontFamily: "'Playfair Display', serif" }}>Create Account</h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>Start your AI-powered study journey.</p>
+          <h1 style={{ fontSize: "1.8rem", marginBottom: "0.5rem", fontFamily: "'Playfair Display', serif" }}>Buat Akun</h1>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>Mulai perjalanan belajar berbasis AI Anda.</p>
         </div>
 
         {state?.error && (
@@ -38,7 +38,7 @@ export default function RegisterPage() {
 
         <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Full Name</label>
+            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Nama Lengkap</label>
             <div style={{ position: "relative" }}>
               <User size={18} color="var(--text-muted)" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
               <input 
@@ -61,7 +61,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Email Address</label>
+            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Alamat Email</label>
             <div style={{ position: "relative" }}>
               <Mail size={18} color="var(--text-muted)" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
               <input 
@@ -84,7 +84,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Password</label>
+            <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 500, marginBottom: "8px", color: "var(--text-primary)" }}>Kata Sandi</label>
             <div style={{ position: "relative" }}>
               <Lock size={18} color="var(--text-muted)" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
               <input 
@@ -127,15 +127,15 @@ export default function RegisterPage() {
               opacity: isPending ? 0.7 : 1,
             }}
           >
-            {isPending ? <Loader2 size={18} className="animate-spin" /> : "Create Account"}
+            {isPending ? <Loader2 size={18} className="animate-spin" /> : "Buat Akun"}
             {!isPending && <ArrowRight size={16} />}
           </button>
         </form>
 
         <p style={{ textAlign: "center", marginTop: "1.5rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
-          Already have an account?{" "}
+          Sudah punya akun?{" "}
           <Link href="/login" style={{ color: "var(--accent-blue)", fontWeight: 600, textDecoration: "none" }}>
-            Sign in
+            Masuk
           </Link>
         </p>
       </motion.div>
