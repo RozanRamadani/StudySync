@@ -47,7 +47,7 @@ export function Footer() {
             textAlign: "center",
           }}
         >
-          © 2024 StudySync - Sophisticated AI Recommendation System
+          © 2026 StudySync - Sophisticated AI Recommendation System
         </p>
 
         <div style={{ display: "flex", gap: "1.5rem" }}>
