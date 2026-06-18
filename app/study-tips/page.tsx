@@ -55,30 +55,30 @@ export default function StudyTipsPage() {
   };
 
   return (
-    <div className="page-wrapper">
-      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+    <div className="page-wrapper px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+      <div className="w-full">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "2.5rem", marginBottom: 8 }}>Kuasai Pembelajaran Anda</h1>
-          <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.7, maxWidth: 550 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3 font-serif">Kuasai Pembelajaran Anda</h1>
+          <p className="text-sm sm:text-base text-text-secondary leading-relaxed max-w-2xl">
             Temukan metodologi berbasis bukti yang dikurasi oleh AI kami untuk mengubah potensi akademis Anda. Teknik yang didukung sains untuk pelajar modern.
           </p>
         </motion.div>
 
         {/* Search & Filters */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          style={{ display: "flex", gap: "1rem", marginBottom: "2rem", flexWrap: "wrap", alignItems: "center" }}
+          className="flex flex-col md:flex-row gap-4 mb-8 items-start md:items-center"
         >
-          <div style={{ flex: 1, minWidth: 250, display: "flex", alignItems: "center", gap: 10, background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: "var(--radius-md)", padding: "10px 16px" }}>
-            <Search size={16} color="var(--text-muted)" />
+          <div className="flex-1 w-full min-w-[250px] flex items-center gap-2.5 bg-bg-secondary border border-border-color rounded-lg px-4 py-2.5 shadow-sm">
+            <Search size={16} className="text-text-muted" />
             <input type="text" placeholder="Cari metode (contoh. Memori, Fokus...)" value={search} onChange={(e) => setSearch(e.target.value)}
-              style={{ flex: 1, border: "none", outline: "none", background: "none", fontSize: "0.85rem", color: "var(--text-primary)" }}
+              className="flex-1 bg-transparent border-none outline-none text-sm text-text-primary w-full"
             />
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
             {categories.map((cat) => (
               <button key={cat} onClick={() => setActiveCategory(cat)}
-                style={{ padding: "8px 18px", borderRadius: 24, fontSize: "0.8rem", fontWeight: 500, border: "1px solid var(--border-color)", cursor: "pointer", background: activeCategory === cat ? "var(--accent-blue)" : "transparent", color: activeCategory === cat ? "white" : "var(--text-secondary)", transition: "all 0.2s", whiteSpace: "nowrap" }}
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium border whitespace-nowrap transition-all duration-200 ${activeCategory === cat ? 'bg-accent-blue text-white border-accent-blue shadow-sm' : 'bg-transparent text-text-secondary border-border-color hover:bg-bg-tertiary'}`}
               >
                 {cat}
               </button>
@@ -87,49 +87,50 @@ export default function StudyTipsPage() {
         </motion.div>
 
         {/* Study Methods Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.25rem", marginBottom: "3rem" }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {filtered.map((method, i) => (
             <motion.div key={method.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * i }}
               whileHover={{ y: -4, boxShadow: "var(--shadow-lg)" }}
-              style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: method.image ? 0 : "1.5rem", border: "1px solid var(--border-color)", overflow: "hidden", display: "flex", flexDirection: "column", cursor: "pointer", transition: "box-shadow 0.3s" }}
+              className={`bg-bg-secondary rounded-2xl border border-border-color overflow-hidden flex flex-col cursor-pointer transition-shadow duration-300 ${!method.image ? 'p-6' : ''}`}
             >
               {method.image && (
-                <div style={{ height: 140, background: "linear-gradient(135deg, #f5f0e8, #e8ddd0)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: "3rem" }}>📝</span>
+                <div className="h-36 bg-gradient-to-br from-[#f5f0e8] to-[#e8ddd0] flex items-center justify-center">
+                  <span className="text-5xl drop-shadow-md">📝</span>
                 </div>
               )}
-              <div style={{ padding: method.image ? "1.25rem" : 0, flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ color: "var(--accent-blue)" }}>{method.icon}</div>
+              <div className={`${method.image ? 'p-5' : ''} flex-1 flex flex-col`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="text-accent-blue">{method.icon}</div>
                     {method.badge && (
-                      <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "var(--accent-blue)", background: "var(--accent-blue-light)", padding: "2px 8px", borderRadius: 10, letterSpacing: "0.03em" }}>{method.badge}</span>
+                      <span className="text-[10px] font-bold text-accent-blue bg-accent-blue-light px-2 py-0.5 rounded-full tracking-wider uppercase">{method.badge}</span>
                     )}
                   </div>
                   <button onClick={(e) => { e.stopPropagation(); toggleBookmark(method.id); }}
-                    style={{ background: "none", border: "none", cursor: "pointer", color: bookmarked.includes(method.id) ? "var(--accent-blue)" : "var(--text-muted)" }}
+                    className={`bg-transparent border-none cursor-pointer p-1 rounded-full transition-colors ${bookmarked.includes(method.id) ? 'text-accent-blue' : 'text-text-muted hover:bg-bg-tertiary'}`}
+                    aria-label="Bookmark"
                   >
-                    <Bookmark size={16} fill={bookmarked.includes(method.id) ? "var(--accent-blue)" : "none"} />
+                    <Bookmark size={18} fill={bookmarked.includes(method.id) ? "var(--accent-blue)" : "none"} />
                   </button>
                 </div>
 
-                <h3 style={{ fontSize: "1.05rem", marginBottom: 8, fontFamily: "'Playfair Display', serif" }}>{method.title}</h3>
-                <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6, flex: 1, marginBottom: 12 }}>{method.description}</p>
+                <h3 className="text-lg font-semibold mb-2 font-serif">{method.title}</h3>
+                <p className="text-xs sm:text-sm text-text-secondary leading-relaxed flex-1 mb-4">{method.description}</p>
 
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+                <div className="flex gap-2 flex-wrap mb-4">
                   {method.tags.map((tag) => (
-                    <span key={tag} style={{ fontSize: "0.7rem", padding: "3px 10px", borderRadius: 16, border: "1px solid var(--border-color)", color: "var(--text-muted)" }}>{tag}</span>
+                    <span key={tag} className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full border border-border-color text-text-muted">{tag}</span>
                   ))}
                 </div>
 
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.72rem", color: "var(--text-muted)", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  <div className="flex justify-between text-[10px] sm:text-xs text-text-muted mb-1.5 uppercase tracking-wider font-semibold">
                     <span>Tingkat Efektivitas</span>
-                    <span>{method.effectiveness}%</span>
+                    <span className="text-accent-blue">{method.effectiveness}%</span>
                   </div>
-                  <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2 }}>
+                  <div className="w-full h-1.5 bg-border-color rounded-full overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${method.effectiveness}%` }} transition={{ duration: 0.8, delay: 0.1 * i }}
-                      style={{ height: "100%", background: "var(--accent-blue)", borderRadius: 2 }}
+                      className="h-full bg-accent-blue rounded-full"
                     />
                   </div>
                 </div>
@@ -140,34 +141,43 @@ export default function StudyTipsPage() {
 
         {/* Daily Study Insights Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          style={{ background: "var(--bg-tertiary)", borderRadius: "var(--radius-xl)", padding: "3rem 2rem", marginBottom: "2rem" }}
+          className="bg-bg-tertiary rounded-2xl p-6 sm:p-10 lg:p-12 mb-8 shadow-sm overflow-hidden"
         >
-          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem", alignItems: "center" }} className="grid-2col">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "var(--bg-secondary)", padding: "4px 14px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 600, color: "var(--accent-blue)", marginBottom: 16, border: "1px solid var(--border-color)" }}>
+              <span className="inline-flex items-center gap-1.5 bg-bg-secondary px-3.5 py-1 rounded-full text-xs font-bold text-accent-blue mb-4 border border-border-color shadow-sm">
                 ✨ Wawasan Generasi AI
               </span>
-              <h2 style={{ fontSize: "2rem", marginBottom: 12 }}>Wawasan Belajar Harian</h2>
-              <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 24 }}>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3 font-serif">Wawasan Belajar Harian</h2>
+              <p className="text-sm sm:text-base text-text-secondary leading-relaxed mb-6">
                 Setiap pagi, AI kami menganalisis tren akademis dan riset ilmu kognitif untuk memberikan satu langkah praktis untuk meningkatkan efisiensi Anda.
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+              <div className="flex flex-col gap-3 mb-8">
                 {["Saran terpersonalisasi berdasarkan jurusan dan kebiasaan belajar Anda.", "Rangkuman mingguan skor fokus dan matriks memori Anda."].map((item) => (
-                  <div key={item} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.85rem", color: "var(--text-secondary)" }}>
-                    <CheckCircle2 size={16} color="var(--accent-blue)" /> {item}
+                  <div key={item} className="flex items-start gap-2.5 text-sm text-text-secondary">
+                    <CheckCircle2 size={18} className="text-accent-blue shrink-0 mt-0.5" /> 
+                    <span className="leading-snug">{item}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ display: "flex", gap: 8 }}>
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input type="email" placeholder="Masukkan email Anda"
-                  style={{ flex: 1, padding: "10px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)", background: "var(--bg-secondary)", fontSize: "0.85rem", color: "var(--text-primary)", outline: "none" }}
+                  className="flex-1 px-4 py-3 rounded-xl border border-border-color bg-bg-secondary text-sm text-text-primary outline-none focus:border-accent-blue transition-colors w-full"
                 />
-                <button style={{ padding: "10px 20px", background: "var(--accent-blue)", color: "white", borderRadius: "var(--radius-md)", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>Berlangganan Sekarang</button>
+                <button className="px-6 py-3 bg-accent-blue hover:bg-accent-blue-hover text-white rounded-xl border-none text-sm font-semibold cursor-pointer transition-colors shadow-sm whitespace-nowrap w-full sm:w-auto">
+                  Berlangganan Sekarang
+                </button>
               </div>
-              <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 8 }}>Bergabung bersama 15.000+ pelajar lainnya untuk membawa performa pembelajaran kalian ke level selanjutnya.</p>
+              <p className="text-[10px] sm:text-xs text-text-muted mt-3">Bergabung bersama 15.000+ pelajar lainnya untuk membawa performa pembelajaran kalian ke level selanjutnya.</p>
             </div>
-            <div style={{ background: "linear-gradient(135deg, #d4c5a9, #b8a88a)", borderRadius: "var(--radius-xl)", height: 300, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: "4rem" }}>💻</span>
+            <div className="bg-gradient-to-br from-[#d4c5a9] to-[#b8a88a] rounded-2xl h-48 sm:h-64 md:h-full min-h-[250px] flex items-center justify-center shadow-inner">
+              <motion.span 
+                animate={{ y: [0, -10, 0] }} 
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                className="text-6xl sm:text-7xl drop-shadow-lg"
+              >
+                💻
+              </motion.span>
             </div>
           </div>
         </motion.div>

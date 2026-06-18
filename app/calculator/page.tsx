@@ -60,19 +60,21 @@ export default function CalculatorPage() {
 
   return (
     <div className="page-wrapper">
-      <div className="grid-calc" style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <div className="flex flex-col lg:grid lg:grid-cols-[420px_1fr] gap-6 max-w-[1200px] mx-auto w-full">
         {/* LEFT: Input Panel */}
-        <div>
+        <div className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "2rem", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-md)", position: "relative", overflow: "hidden" }}
+            className="bg-bg-secondary rounded-2xl p-6 sm:p-8 border border-border-color shadow-md relative overflow-hidden w-full"
           >
             {/* Decorative */}
-            <div style={{ position: "absolute", top: 0, right: 0, width: 120, height: 120, opacity: 0.05, fontSize: 100, lineHeight: 1, fontFamily: "monospace", color: "var(--accent-blue)" }}>{"{ }"}</div>
+            <div className="absolute top-0 right-0 w-32 h-32 opacity-5 text-8xl leading-none font-mono text-accent-blue pointer-events-none">
+              {"{ }"}
+            </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: "1.75rem" }}>
-              <SlidersHorizontal size={20} color="var(--accent-blue)" />
-              <h2 style={{ fontSize: "1.35rem", fontWeight: 700 }}>Input Parameter</h2>
+            <div className="flex items-center gap-3 mb-7">
+              <SlidersHorizontal size={20} className="text-accent-blue" />
+              <h2 className="text-xl sm:text-2xl font-bold">Input Parameter</h2>
             </div>
 
             {/* Sliders */}
@@ -81,19 +83,20 @@ export default function CalculatorPage() {
               { label: "Tingkat Kelelahan", value: fatigue, set: setFatigue, low: "Segar", high: "Lelah", color: "#2563EB" },
               { label: "Kompleksitas Materi", value: complexity, set: setComplexity, low: "Mudah", high: "Rumit", color: "#2563EB" },
             ].map((slider, i) => (
-              <div key={i} style={{ marginBottom: i < 2 ? "1.75rem" : "2rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                  <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-primary)" }}>{slider.label}</span>
-                  <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "white", background: "var(--accent-blue)", borderRadius: 20, padding: "2px 12px" }}>{slider.value}%</span>
+              <div key={i} className={`mb-${i < 2 ? '7' : '8'}`}>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-text-primary">{slider.label}</span>
+                  <span className="text-xs font-semibold text-white bg-accent-blue rounded-full px-3 py-0.5">{slider.value}%</span>
                 </div>
                 <input
                   type="range" min={0} max={100} value={slider.value}
                   onChange={(e) => slider.set(Number(e.target.value))}
-                  style={{ width: "100%", background: `linear-gradient(to right, ${slider.color} ${slider.value}%, var(--border-color) ${slider.value}%)` }}
+                  className="w-full"
+                  style={{ background: `linear-gradient(to right, ${slider.color} ${slider.value}%, var(--border-color) ${slider.value}%)` }}
                 />
-                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
-                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{slider.low}</span>
-                  <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{slider.high}</span>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-xs text-text-muted">{slider.low}</span>
+                  <span className="text-xs text-text-muted">{slider.high}</span>
                 </div>
               </div>
             ))}
@@ -101,7 +104,7 @@ export default function CalculatorPage() {
             <motion.button
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               onClick={handleCalculate} disabled={loading}
-              style={{ width: "100%", padding: "16px", borderRadius: "var(--radius-md)", background: loading ? "var(--text-muted)" : "var(--accent-blue)", color: "white", border: "none", cursor: loading ? "not-allowed" : "pointer", fontSize: "1rem", fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "background 0.2s" }}
+              className={`w-full p-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition-colors ${loading ? 'bg-text-muted cursor-not-allowed' : 'bg-accent-blue hover:bg-accent-blue-hover cursor-pointer'}`}
             >
               <Clock size={18} /> Hitung Durasi
             </motion.button>
@@ -111,13 +114,13 @@ export default function CalculatorPage() {
           <AnimatePresence>
             {result && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.2 }}
-                style={{ marginTop: "1.5rem", background: "var(--accent-blue)", borderRadius: "var(--radius-xl)", padding: "1.5rem", color: "white" }}
+                className="mt-6 bg-accent-blue rounded-2xl p-6 text-white w-full shadow-md"
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <div className="flex items-center gap-2 mb-3">
                   <Lightbulb size={18} />
-                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>Wawasan Belajar AI</span>
+                  <span className="font-semibold text-base">Wawasan Belajar AI</span>
                 </div>
-                <p style={{ fontSize: "0.85rem", opacity: 0.9, lineHeight: 1.6, fontStyle: "italic" }}>
+                <p className="text-sm opacity-90 leading-relaxed italic">
                   &quot;{tips}&quot;
                 </p>
               </motion.div>
@@ -126,20 +129,21 @@ export default function CalculatorPage() {
         </div>
 
         {/* RIGHT: Results */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div className="flex flex-col gap-6 w-full">
           {/* Loading State */}
           <AnimatePresence>
             {loading && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "3rem 2rem", border: "1px solid var(--border-color)", textAlign: "center" }}
+                className="bg-bg-secondary rounded-2xl p-10 sm:p-12 border border-border-color text-center w-full"
               >
-                <Brain size={40} color="var(--accent-blue)" style={{ margin: "0 auto 1rem" }} className="animate-pulse" />
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <Brain size={48} className="text-accent-blue mx-auto mb-6 animate-pulse" />
+                <div className="flex flex-col gap-3 max-w-[280px] mx-auto">
                   {loadingSteps.map((step, i) => (
                     <motion.div key={i} initial={{ opacity: 0.3 }} animate={{ opacity: i <= loadingStep ? 1 : 0.3 }}
-                      style={{ fontSize: "0.85rem", color: i <= loadingStep ? "var(--accent-blue)" : "var(--text-muted)", fontWeight: i === loadingStep ? 600 : 400, transition: "all 0.3s" }}
+                      className={`text-sm sm:text-base text-left flex items-center gap-2 transition-all duration-300 ${i <= loadingStep ? 'text-accent-blue' : 'text-text-muted'} ${i === loadingStep ? 'font-semibold' : 'font-normal'}`}
                     >
-                      {i < loadingStep ? "✓" : i === loadingStep ? "⟳" : "○"} {step}
+                      <span className="shrink-0">{i < loadingStep ? "✓" : i === loadingStep ? "⟳" : "○"}</span> 
+                      <span>{step}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -150,44 +154,46 @@ export default function CalculatorPage() {
           {/* Recommendation Panel */}
           {!loading && result && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "2rem", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-md)" }}
+              className="bg-bg-secondary rounded-2xl p-6 sm:p-8 border border-border-color shadow-md w-full"
             >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 sm:gap-4 mb-8">
                 <div>
-                  <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: 4, fontFamily: "'Playfair Display', serif" }}>Rekomendasi</p>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                    <span style={{ fontSize: "3.5rem", fontWeight: 700, fontFamily: "'Playfair Display', serif", color: "var(--text-primary)" }}>{result.duration}</span>
-                    <span style={{ fontSize: "1.5rem", fontWeight: 600, fontFamily: "'Playfair Display', serif", color: "var(--accent-blue)" }}>Menit</span>
+                  <p className="text-sm text-text-muted mb-1 font-serif">Rekomendasi</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl sm:text-6xl font-bold font-serif text-text-primary">{result.duration}</span>
+                    <span className="text-xl sm:text-2xl font-semibold font-serif text-accent-blue">Menit</span>
                   </div>
-                  <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                  <div className="flex flex-wrap gap-2 mt-4">
                     {(["Pendek", "Ideal", "Panjang"] as const).map((cat) => (
-                      <span key={cat} style={{ padding: "4px 16px", borderRadius: 20, fontSize: "0.8rem", fontWeight: 500, background: cat === categoryLabel ? "var(--accent-blue)" : "var(--bg-primary)", color: cat === categoryLabel ? "white" : "var(--text-secondary)", border: `1px solid ${cat === categoryLabel ? "var(--accent-blue)" : "var(--border-color)"}` }}>
+                      <span key={cat} className={`px-4 py-1.5 rounded-full text-xs font-medium border ${cat === categoryLabel ? 'bg-accent-blue text-white border-accent-blue' : 'bg-bg-primary text-text-secondary border-border-color'}`}>
                         {cat}
                       </span>
                     ))}
                   </div>
                 </div>
-                <ConfidenceRing value={result.confidence} />
+                <div className="self-center sm:self-auto shrink-0">
+                   <ConfidenceRing value={result.confidence} />
+                </div>
               </div>
 
               {/* Membership Analytics */}
-              <div style={{ marginTop: "2rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "1rem" }}>
-                  <BookOpen size={16} color="var(--accent-blue)" />
-                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>Analisis Keanggotaan</span>
+              <div className="mt-8 border-t border-border-color pt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <BookOpen size={16} className="text-accent-blue" />
+                  <span className="font-semibold text-base">Analisis Keanggotaan</span>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem" }}>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {[
                     { label: "Fokus: " + (focus >= 50 ? "Tinggi" : focus >= 25 ? "Sedang" : "Rendah"), mu: Math.max(result.focusMembership.low, result.focusMembership.medium, result.focusMembership.high) },
                     { label: "Lelah: " + (fatigue >= 50 ? "Tinggi" : fatigue >= 25 ? "Sedang" : "Rendah"), mu: Math.max(result.fatigueMembership.low, result.fatigueMembership.medium, result.fatigueMembership.high) },
                     { label: "Materi: " + (complexity >= 50 ? "Sulit" : complexity >= 25 ? "Sedang" : "Mudah"), mu: Math.max(result.complexityMembership.low, result.complexityMembership.medium, result.complexityMembership.high) },
                   ].map((item, i) => (
-                    <div key={i} style={{ background: "var(--bg-primary)", borderRadius: "var(--radius-md)", padding: "1rem", border: "1px solid var(--border-color)" }}>
-                      <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginBottom: 8 }}>{item.label}</p>
-                      <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2 }}>
-                        <motion.div initial={{ width: 0 }} animate={{ width: `${item.mu * 100}%` }} transition={{ duration: 0.8 }} style={{ height: "100%", background: "var(--accent-blue)", borderRadius: 2 }} />
+                    <div key={i} className="bg-bg-primary rounded-xl p-4 border border-border-color">
+                      <p className="text-xs sm:text-sm text-text-secondary mb-2">{item.label}</p>
+                      <div className="w-full h-1.5 bg-border-color rounded-full overflow-hidden">
+                        <motion.div initial={{ width: 0 }} animate={{ width: `${item.mu * 100}%` }} transition={{ duration: 0.8 }} className="h-full bg-accent-blue rounded-full" />
                       </div>
-                      <p style={{ fontSize: "0.75rem", color: "var(--accent-blue)", marginTop: 6, fontWeight: 500 }}>μ = {item.mu.toFixed(2)}</p>
+                      <p className="text-xs text-accent-blue mt-2 font-medium">μ = {item.mu.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -198,18 +204,20 @@ export default function CalculatorPage() {
           {/* Active Logic Path */}
           {!loading && result && strongestRule && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "1.5rem", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}
+              className="bg-bg-secondary rounded-2xl p-6 border border-border-color shadow-sm w-full"
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12, flexWrap: "wrap" }}>
-                <span style={{ background: "var(--accent-blue)", color: "white", padding: "2px 10px", borderRadius: 6, fontSize: "0.75rem", fontWeight: 700 }}>RULE #{strongestRule.id}</span>
-                <span style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.05em", color: "var(--text-muted)" }}>JALUR LOGIKA AKTIF</span>
-                <span style={{ marginLeft: "auto", fontSize: "0.75rem", color: "var(--accent-blue)" }}>● Alpha: {strongestRule.strength.toFixed(2)}</span>
-                <span style={{ fontSize: "0.75rem", color: "var(--warning)" }}>● Inf: {result.confidence}%</span>
+              <div className="flex items-center gap-3 mb-4 flex-wrap">
+                <span className="bg-accent-blue text-white px-2.5 py-1 rounded-md text-xs font-bold shrink-0">RULE #{strongestRule.id}</span>
+                <span className="text-xs font-semibold tracking-wider text-text-muted">JALUR LOGIKA AKTIF</span>
+                <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-4 text-xs">
+                  <span className="text-accent-blue">● Alpha: {strongestRule.strength.toFixed(2)}</span>
+                  <span className="text-warning">● Inf: {result.confidence}%</span>
+                </div>
               </div>
-              <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontStyle: "italic" }}>
-                &quot;IF <span style={{ color: "var(--accent-blue)", textDecoration: "underline" }}>Fokus {strongestRule.focus === "high" ? "Tinggi" : strongestRule.focus === "medium" ? "Sedang" : "Rendah"}</span> AND{" "}
-                <span style={{ color: "var(--accent-blue)", textDecoration: "underline" }}>Kelelahan {strongestRule.fatigue === "high" ? "Tinggi" : strongestRule.fatigue === "medium" ? "Sedang" : "Rendah"}</span> THEN{" "}
-                <span style={{ color: "var(--accent-blue)", textDecoration: "underline" }}>Durasi {strongestRule.output === "sangatPanjang" ? "Sangat Lama" : strongestRule.output === "panjang" ? "Lama" : strongestRule.output === "sedang" ? "Sedang" : strongestRule.output === "pendek" ? "Pendek" : "Sangat Pendek"}</span>&quot;
+              <p className="font-serif text-lg sm:text-xl italic leading-relaxed text-text-primary">
+                &quot;IF <span className="text-accent-blue underline decoration-2 underline-offset-4">Fokus {strongestRule.focus === "high" ? "Tinggi" : strongestRule.focus === "medium" ? "Sedang" : "Rendah"}</span> AND{" "}
+                <span className="text-accent-blue underline decoration-2 underline-offset-4">Kelelahan {strongestRule.fatigue === "high" ? "Tinggi" : strongestRule.fatigue === "medium" ? "Sedang" : "Rendah"}</span> THEN{" "}
+                <span className="text-accent-blue underline decoration-2 underline-offset-4">Durasi {strongestRule.output === "sangatPanjang" ? "Sangat Lama" : strongestRule.output === "panjang" ? "Lama" : strongestRule.output === "sedang" ? "Sedang" : strongestRule.output === "pendek" ? "Pendek" : "Sangat Pendek"}</span>&quot;
               </p>
             </motion.div>
           )}
@@ -217,21 +225,21 @@ export default function CalculatorPage() {
           {/* Stats Cards & Start Session */}
           {!loading && result && (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "1rem" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 {[
-                  { icon: <Zap size={22} color="var(--accent-blue)" />, value: `${Math.round(result.confidence * 0.95)}%`, label: "Efisiensi Fokus", bars: result.confidence },
-                  { icon: <Timer size={22} color="var(--accent-blue)" />, value: `${Math.max(5, Math.round(result.duration * 0.1))}m`, label: "Saran Istirahat", bars: 60 },
-                  { icon: <BookOpen size={22} color="var(--accent-blue)" />, value: result.duration >= 90 ? "Dalam" : result.duration >= 50 ? "Sedang" : "Ringan", label: "Mode Belajar", bars: Math.min(100, result.duration) },
+                  { icon: <Zap size={22} className="text-accent-blue" />, value: `${Math.round(result.confidence * 0.95)}%`, label: "Efisiensi Fokus", bars: result.confidence },
+                  { icon: <Timer size={22} className="text-accent-blue" />, value: `${Math.max(5, Math.round(result.duration * 0.1))}m`, label: "Saran Istirahat", bars: 60 },
+                  { icon: <BookOpen size={22} className="text-accent-blue" />, value: result.duration >= 90 ? "Dalam" : result.duration >= 50 ? "Sedang" : "Ringan", label: "Mode Belajar", bars: Math.min(100, result.duration) },
                 ].map((card, i) => (
                   <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}
-                    style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.25rem", border: "1px solid var(--border-color)", textAlign: "center" }}
+                    className="bg-bg-secondary rounded-xl p-5 border border-border-color text-center w-full shadow-sm"
                   >
-                    <div style={{ margin: "0 auto 8px" }}>{card.icon}</div>
-                    <p style={{ fontSize: "1.6rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>{card.value}</p>
-                    <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: 8 }}>{card.label}</p>
-                    <div style={{ display: "flex", justifyContent: "center", gap: 3 }}>
+                    <div className="mx-auto mb-3 flex justify-center">{card.icon}</div>
+                    <p className="text-2xl sm:text-3xl font-bold font-serif mb-1">{card.value}</p>
+                    <p className="text-xs text-text-muted mb-3">{card.label}</p>
+                    <div className="flex justify-center gap-1">
                       {[...Array(5)].map((_, j) => (
-                        <div key={j} style={{ width: 6, height: 16, borderRadius: 2, background: j < Math.ceil(card.bars / 20) ? "var(--accent-blue)" : "var(--border-color)" }} />
+                        <div key={j} className={`w-1.5 h-4 rounded-sm ${j < Math.ceil(card.bars / 20) ? 'bg-accent-blue' : 'bg-border-color'}`} />
                       ))}
                     </div>
                   </motion.div>
@@ -241,9 +249,9 @@ export default function CalculatorPage() {
               <motion.button
                 whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
                 onClick={() => setShowTimer(true)}
-                style={{ width: "100%", padding: "18px", borderRadius: "var(--radius-lg)", background: "var(--accent-blue)", color: "white", border: "none", cursor: "pointer", fontSize: "1.05rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, fontFamily: "'Playfair Display', serif" }}
+                className="w-full p-4 sm:p-5 rounded-xl bg-accent-blue hover:bg-accent-blue-hover text-white border-none cursor-pointer text-lg font-bold flex items-center justify-center gap-3 font-serif transition-colors shadow-md"
               >
-                <Play size={20} /> Mulai Sesi Belajar
+                <Play size={22} /> Mulai Sesi Belajar
               </motion.button>
             </>
           )}
@@ -251,12 +259,12 @@ export default function CalculatorPage() {
           {/* Empty State */}
           {!loading && !result && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "4rem 2rem", border: "1px solid var(--border-color)", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}
+              className="bg-bg-secondary rounded-2xl p-10 sm:p-16 border border-border-color text-center flex flex-col items-center gap-4 w-full"
             >
-              <Brain size={48} color="var(--border-color)" />
-              <h3 style={{ fontSize: "1.1rem", color: "var(--text-muted)" }}>Set your parameters and click &quot;Hitung Durasi&quot;</h3>
-              <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", maxWidth: 400 }}>
-                Our AI-powered fuzzy logic engine will analyze your inputs and recommend the optimal study duration.
+              <Brain size={56} className="text-border-color" />
+              <h3 className="text-lg font-semibold text-text-secondary">Setel parameter di samping & klik &quot;Hitung Durasi&quot;</h3>
+              <p className="text-sm text-text-muted max-w-sm">
+                Mesin logika fuzzy AI kami akan menganalisis input Anda dan merekomendasikan durasi belajar yang optimal.
               </p>
             </motion.div>
           )}

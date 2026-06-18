@@ -49,44 +49,11 @@ export function Navbar() {
     : "synced";
 
   return (
-    <nav
-      style={{
-        backgroundColor: "var(--bg-secondary)",
-        borderBottom: "1px solid var(--border-color)",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        transition: "background-color 0.3s ease",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "0 1.5rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: "72px",
-        }}
-      >
+    <nav className="bg-bg-secondary border-b border-border-color sticky top-0 z-50 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[72px]">
         {/* Logo */}
-        <Link
-          href="/"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            textDecoration: "none",
-          }}
-        >
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-            style={{ flexShrink: 0 }}
-          >
+        <Link href="/" className="flex items-center gap-2 no-underline">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="shrink-0">
             <circle cx="14" cy="14" r="12" stroke="var(--accent-blue)" strokeWidth="2" />
             <circle cx="14" cy="14" r="6" fill="var(--accent-blue)" opacity="0.2" />
             <circle cx="14" cy="14" r="3" fill="var(--accent-blue)" />
@@ -95,50 +62,24 @@ export function Navbar() {
             <path d="M2 14 L6 14" stroke="var(--accent-blue)" strokeWidth="1.5" />
             <path d="M22 14 L26 14" stroke="var(--accent-blue)" strokeWidth="1.5" />
           </svg>
-          <span
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "1.25rem",
-              fontWeight: 700,
-              color: "var(--accent-blue)",
-            }}
-          >
+          <span className="font-serif text-xl font-bold text-accent-blue">
             StudySync
           </span>
         </Link>
 
         {/* Desktop Nav Links */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "2rem",
-          }}
-          className="hidden md:flex"
-        >
+        <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                style={{
-                  fontSize: "0.9rem",
-                  fontWeight: 500,
-                  color: isActive ? "var(--accent-blue)" : "var(--text-secondary)",
-                  textDecorationLine: isActive ? "underline" : "none",
-                  textUnderlineOffset: "6px",
-                  textDecorationThickness: "2px",
-                  transition: "color 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive)
-                    (e.target as HTMLElement).style.color = "var(--accent-blue)";
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive)
-                    (e.target as HTMLElement).style.color = "var(--text-secondary)";
-                }}
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  isActive 
+                    ? "text-accent-blue underline underline-offset-[6px] decoration-2" 
+                    : "text-text-secondary hover:text-accent-blue"
+                }`}
               >
                 {item.label}
               </Link>
@@ -147,66 +88,29 @@ export function Navbar() {
         </div>
 
         {/* Right Section */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <div style={{ display: "flex", alignItems: "center", marginRight: "8px" }} title={`Sync Status: ${syncStatus}`}>
-            {syncStatus === "syncing" && <RefreshCw size={18} color="var(--accent-blue)" className="animate-spin" />}
-            {syncStatus === "synced" && <Cloud size={18} color="var(--success, #10B981)" />}
-            {syncStatus === "failed" && <CloudOff size={18} color="var(--danger, #EF4444)" />}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center mr-2" title={`Sync Status: ${syncStatus}`}>
+            {syncStatus === "syncing" && <RefreshCw size={18} className="text-accent-blue animate-spin" />}
+            {syncStatus === "synced" && <Cloud size={18} className="text-success" />}
+            {syncStatus === "failed" && <CloudOff size={18} className="text-danger" />}
           </div>
 
           <button
             onClick={toggleTheme}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid var(--border-color)",
-              backgroundColor: "transparent",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "var(--text-secondary)",
-              transition: "all 0.2s ease",
-            }}
+            className="w-10 h-10 rounded-full border border-border-color bg-transparent flex items-center justify-center cursor-pointer text-text-secondary transition-all duration-200 hover:bg-bg-tertiary"
             aria-label="Ganti Tema"
           >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>
 
           {user ? (
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <div 
-                style={{ 
-                  width: "40px", 
-                  height: "40px", 
-                  borderRadius: "50%", 
-                  background: "var(--accent-blue-soft)", 
-                  color: "var(--accent-blue)",
-                  display: "flex", 
-                  alignItems: "center", 
-                  justifyContent: "center",
-                  fontWeight: 600,
-                  fontSize: "0.9rem"
-                }}
-              >
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-accent-blue-soft text-accent-blue flex items-center justify-center font-semibold text-sm">
                 {user.email?.charAt(0).toUpperCase()}
               </div>
               <button
                 onClick={() => signout()}
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  border: "1px solid var(--border-color)",
-                  backgroundColor: "transparent",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  color: "var(--danger, #EF4444)",
-                  transition: "all 0.2s ease",
-                }}
+                className="w-10 h-10 rounded-full border border-border-color bg-transparent flex items-center justify-center cursor-pointer text-danger transition-all duration-200 hover:bg-bg-tertiary"
                 title="Keluar"
                 aria-label="Keluar"
               >
@@ -216,18 +120,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "8px 16px",
-                borderRadius: "20px",
-                backgroundColor: "var(--accent-blue)",
-                color: "white",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-accent-blue text-white text-sm font-semibold no-underline hover:bg-accent-blue-hover transition-colors"
             >
               <User size={16} />
               Masuk
@@ -237,19 +130,7 @@ export function Navbar() {
           {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid var(--border-color)",
-              backgroundColor: "transparent",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "var(--text-secondary)",
-            }}
-            className="md:hidden"
+            className="w-10 h-10 rounded-full border border-border-color bg-transparent flex items-center justify-center cursor-pointer text-text-secondary md:hidden transition-colors hover:bg-bg-tertiary"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
@@ -265,14 +146,9 @@ export function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            style={{
-              overflow: "hidden",
-              borderTop: "1px solid var(--border-color)",
-              backgroundColor: "var(--bg-secondary)",
-            }}
-            className="md:hidden"
+            className="overflow-hidden border-t border-border-color bg-bg-secondary md:hidden"
           >
-            <div style={{ padding: "1rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <div className="px-6 py-4 flex flex-col gap-3">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -280,13 +156,9 @@ export function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    style={{
-                      fontSize: "0.95rem",
-                      fontWeight: 500,
-                      color: isActive ? "var(--accent-blue)" : "var(--text-secondary)",
-                      textDecoration: "none",
-                      padding: "0.5rem 0",
-                    }}
+                    className={`text-base font-medium py-2 no-underline ${
+                      isActive ? "text-accent-blue" : "text-text-secondary"
+                    }`}
                   >
                     {item.label}
                   </Link>

@@ -49,3 +49,5 @@ node_modules/
 /playwright/.auth/
 
 /prompt
+# Local Netlify folder
+.netlify

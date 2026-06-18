@@ -70,47 +70,46 @@ export default function FuzzyLogicPage() {
   const uniqueLabels = graphPoints[0]?.lines.map(l => ({ label: l.label, color: l.color })) || [];
 
   return (
-    <div className="page-wrapper">
-      <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+    <div className="page-wrapper px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+      <div className="w-full">
         {/* Hero Section */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2rem", marginBottom: "3rem", alignItems: "center" }}
-          className="grid-hero"
+          className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-8 mb-12 items-center"
         >
           <div>
-            <span style={{ display: "inline-block", background: "var(--accent-blue-soft)", color: "var(--accent-blue)", padding: "4px 14px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 600, marginBottom: 16 }}>
+            <span className="inline-block bg-accent-blue-soft text-accent-blue px-3.5 py-1 rounded-full text-xs font-bold mb-4 shadow-sm border border-border-color">
               ✨ AI Core Concepts
             </span>
-            <h1 style={{ fontSize: "2.5rem", lineHeight: 1.2, marginBottom: 12 }}>Understanding Fuzzy Logic</h1>
-            <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 24, maxWidth: 500 }}>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-serif leading-tight mb-3">Understanding Fuzzy Logic</h1>
+            <p className="text-sm sm:text-base text-text-secondary leading-relaxed mb-6 max-w-lg">
               Explore how StudySync uses the Mamdani method to transform ambiguous study habits into precise, actionable academic recommendations.
             </p>
-            <div style={{ display: "flex", gap: 12 }}>
-              <a href="/calculator" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--accent-blue)", color: "white", borderRadius: "var(--radius-md)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
-                <Play size={14} /> Start Simulation
+            <div className="flex flex-wrap gap-3">
+              <a href="/calculator" className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-accent-blue hover:bg-accent-blue-hover text-white rounded-lg text-sm font-semibold no-underline transition-colors shadow-sm">
+                <Play size={16} /> Start Simulation
               </a>
-              <button style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 20px", background: "var(--bg-secondary)", color: "var(--text-primary)", borderRadius: "var(--radius-md)", fontSize: "0.85rem", fontWeight: 500, border: "1px solid var(--border-color)", cursor: "pointer" }}>
-                <Download size={14} /> Download Guide
+              <button className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-bg-secondary hover:bg-bg-tertiary text-text-primary rounded-lg text-sm font-medium border border-border-color cursor-pointer transition-colors shadow-sm">
+                <Download size={16} /> Download Guide
               </button>
             </div>
           </div>
-          <div style={{ background: "linear-gradient(135deg, #F59E0B22, #8B5CF622)", borderRadius: "var(--radius-xl)", height: 200, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <div style={{ fontSize: "4rem", opacity: 0.3 }}>🧠</div>
+          <div className="bg-gradient-to-br from-[#F59E0B22] to-[#8B5CF622] rounded-2xl h-48 sm:h-64 flex items-center justify-center overflow-hidden border border-border-color">
+            <div className="text-6xl sm:text-7xl opacity-30 drop-shadow-md">🧠</div>
           </div>
         </motion.div>
 
         {/* Mamdani Pipeline */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <h2 style={{ fontSize: "1.5rem", textAlign: "center", marginBottom: "2rem" }}>The Mamdani Inference Pipeline</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem", marginBottom: "3rem" }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 font-serif">The Mamdani Inference Pipeline</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {pipelineSteps.map((step, i) => (
               <motion.div key={i} whileHover={{ y: -4 }}
-                style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.5rem", border: "1px solid var(--border-color)", textAlign: "center" }}
+                className="bg-bg-secondary rounded-xl p-6 border border-border-color text-center shadow-sm transition-shadow hover:shadow-md"
               >
-                <div style={{ color: "var(--accent-blue)", margin: "0 auto 12px", width: 48, height: 48, borderRadius: "var(--radius-md)", background: "var(--accent-blue-soft)", display: "flex", alignItems: "center", justifyContent: "center" }}>{step.icon}</div>
-                <h3 style={{ fontSize: "1rem", marginBottom: 6, fontFamily: "Inter, sans-serif", fontWeight: 600 }}>{step.title}</h3>
-                <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>{step.desc}</p>
-                <span style={{ fontSize: "0.7rem", color: "var(--accent-blue)", fontWeight: 600, marginTop: 8, display: "inline-block" }}>{step.step}</span>
+                <div className="text-accent-blue mx-auto mb-3 w-12 h-12 rounded-lg bg-accent-blue-soft flex items-center justify-center">{step.icon}</div>
+                <h3 className="text-base font-bold mb-1.5">{step.title}</h3>
+                <p className="text-xs sm:text-sm text-text-muted leading-relaxed">{step.desc}</p>
+                <span className="text-[10px] sm:text-xs text-accent-blue font-bold mt-3 block uppercase tracking-wider">{step.step}</span>
               </motion.div>
             ))}
           </div>
@@ -118,17 +117,17 @@ export default function FuzzyLogicPage() {
 
         {/* Membership Graphs */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-xl)", padding: "2rem", border: "1px solid var(--border-color)", marginBottom: "2rem" }}
+          className="bg-bg-secondary rounded-2xl p-6 sm:p-8 border border-border-color mb-8 shadow-sm w-full"
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
-              <h2 style={{ fontSize: "1.3rem", marginBottom: 4 }}>Fuzzy Membership Graphs</h2>
-              <p style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>Visualizing input variables. <strong>Drag the slider</strong> to see membership degrees update.</p>
+              <h2 className="text-xl font-bold mb-1 font-serif">Fuzzy Membership Graphs</h2>
+              <p className="text-xs sm:text-sm text-text-muted">Visualizing input variables. <strong className="text-text-primary">Drag the slider</strong> to see membership degrees update.</p>
             </div>
-            <div style={{ display: "flex", gap: 8 }}>
+            <div className="flex flex-wrap gap-2 w-full md:w-auto">
               {(["input", "output"] as const).map((mode) => (
                 <button key={mode} onClick={() => setGraphMode(mode)}
-                  style={{ padding: "6px 16px", borderRadius: 20, fontSize: "0.8rem", fontWeight: 500, border: "1px solid var(--border-color)", cursor: "pointer", background: graphMode === mode ? "var(--accent-blue)" : "transparent", color: graphMode === mode ? "white" : "var(--text-secondary)" }}
+                  className={`flex-1 md:flex-none px-4 py-2 rounded-full text-xs font-semibold border transition-colors ${graphMode === mode ? 'bg-accent-blue text-white border-accent-blue' : 'bg-transparent text-text-secondary border-border-color hover:bg-bg-tertiary'}`}
                 >
                   {mode === "input" ? "Input: Study Duration" : "Output: Score"}
                 </button>
@@ -137,75 +136,78 @@ export default function FuzzyLogicPage() {
           </div>
 
           {/* SVG Graph */}
-          <div style={{ overflowX: "auto" }}>
-            <svg viewBox={`0 0 ${graphWidth} ${graphHeight + 30}`} style={{ width: "100%", maxWidth: graphWidth }}>
-              {/* Grid */}
-              {[0, 0.25, 0.5, 0.75, 1].map((y) => (
-                <line key={y} x1={0} y1={toSvgY(y)} x2={graphWidth} y2={toSvgY(y)} stroke="var(--border-color)" strokeWidth={0.5} strokeDasharray={y > 0 && y < 1 ? "4,4" : "0"} />
-              ))}
-              {/* Lines */}
-              {uniqueLabels.map((line, li) => {
-                const points = graphPoints.map((p) => `${toSvgX(p.x)},${toSvgY(p.lines[li].y)}`).join(" ");
-                return (
-                  <g key={li}>
-                    <polyline points={points} fill="none" stroke={line.color} strokeWidth={2} opacity={0.8} />
-                    <polyline points={`${toSvgX(graphPoints[0].x)},${graphHeight} ${points} ${toSvgX(graphPoints[graphPoints.length - 1].x)},${graphHeight}`} fill={line.color} opacity={0.06} />
-                  </g>
-                );
-              })}
-              {/* Value line */}
-              <line x1={toSvgX(graphValue)} y1={0} x2={toSvgX(graphValue)} y2={graphHeight} stroke="var(--accent-blue)" strokeWidth={1.5} strokeDasharray="4,3" />
-              <circle cx={toSvgX(graphValue)} cy={graphHeight / 2} r={5} fill="var(--accent-blue)" />
-              {/* Labels */}
-              {uniqueLabels.map((l, i) => (
-                <text key={i} x={graphWidth * (i / (uniqueLabels.length - 1 || 1))} y={graphHeight + 20} fontSize={10} fill="var(--text-muted)" textAnchor="middle" style={{ textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>{l.label}</text>
-              ))}
-            </svg>
+          <div className="w-full overflow-x-auto scrollbar-hide bg-bg-primary p-4 rounded-xl border border-border-color">
+            <div className="min-w-[500px]">
+              <svg viewBox={`0 0 ${graphWidth} ${graphHeight + 30}`} className="w-full h-auto">
+                {/* Grid */}
+                {[0, 0.25, 0.5, 0.75, 1].map((y) => (
+                  <line key={y} x1={0} y1={toSvgY(y)} x2={graphWidth} y2={toSvgY(y)} stroke="var(--border-color)" strokeWidth={0.5} strokeDasharray={y > 0 && y < 1 ? "4,4" : "0"} />
+                ))}
+                {/* Lines */}
+                {uniqueLabels.map((line, li) => {
+                  const points = graphPoints.map((p) => `${toSvgX(p.x)},${toSvgY(p.lines[li].y)}`).join(" ");
+                  return (
+                    <g key={li}>
+                      <polyline points={points} fill="none" stroke={line.color} strokeWidth={2} opacity={0.8} />
+                      <polyline points={`${toSvgX(graphPoints[0].x)},${graphHeight} ${points} ${toSvgX(graphPoints[graphPoints.length - 1].x)},${graphHeight}`} fill={line.color} opacity={0.06} />
+                    </g>
+                  );
+                })}
+                {/* Value line */}
+                <line x1={toSvgX(graphValue)} y1={0} x2={toSvgX(graphValue)} y2={graphHeight} stroke="var(--accent-blue)" strokeWidth={1.5} strokeDasharray="4,3" />
+                <circle cx={toSvgX(graphValue)} cy={graphHeight / 2} r={5} fill="var(--accent-blue)" />
+                {/* Labels */}
+                {uniqueLabels.map((l, i) => (
+                  <text key={i} x={graphWidth * (i / (uniqueLabels.length - 1 || 1))} y={graphHeight + 20} fontSize={10} fill="var(--text-muted)" textAnchor="middle" className="uppercase tracking-wider font-bold">{l.label}</text>
+                ))}
+              </svg>
+            </div>
           </div>
-          <div style={{ marginTop: "1rem" }}>
+          <div className="mt-6 px-2">
             <input type="range" min={xMin} max={xMax} value={graphValue} onChange={(e) => setGraphValue(Number(e.target.value))}
-              style={{ width: "100%", background: `linear-gradient(to right, var(--accent-blue) ${((graphValue - xMin) / (xMax - xMin)) * 100}%, var(--border-color) ${((graphValue - xMin) / (xMax - xMin)) * 100}%)` }}
+              className="w-full"
+              style={{ background: `linear-gradient(to right, var(--accent-blue) ${((graphValue - xMin) / (xMax - xMin)) * 100}%, var(--border-color) ${((graphValue - xMin) / (xMax - xMin)) * 100}%)` }}
             />
-            <p style={{ textAlign: "center", fontSize: "0.8rem", color: "var(--text-muted)", marginTop: 4 }}>Value: {graphValue}</p>
+            <p className="text-center text-xs font-semibold text-text-muted mt-2 bg-bg-secondary inline-block px-3 py-1 rounded-full mx-auto w-max border border-border-color">Value: {graphValue}</p>
           </div>
         </motion.div>
 
         {/* Centroid Visualization */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem", marginBottom: "2rem" }} className="grid-centroid"
+          className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 mb-12"
         >
-          <div style={{ background: "linear-gradient(135deg, var(--accent-blue), #1D4ED8)", borderRadius: "var(--radius-xl)", padding: "2rem", color: "white" }}>
-            <h2 style={{ fontSize: "1.3rem", marginBottom: 8 }}>Centroid Visualization</h2>
-            <p style={{ fontSize: "0.82rem", opacity: 0.85, lineHeight: 1.6, marginBottom: "1.5rem" }}>
+          <div className="bg-gradient-to-br from-[var(--accent-blue)] to-[#1D4ED8] rounded-2xl p-6 sm:p-8 text-white shadow-md w-full overflow-hidden">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 font-serif">Centroid Visualization</h2>
+            <p className="text-sm opacity-90 leading-relaxed mb-6">
               Watch how the &quot;Center of Gravity&quot; (z*) shifts as the rule strengths fluctuate. The red marker represents your final actionable StudySync recommendation score.
             </p>
-            <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "var(--radius-lg)", padding: "1.5rem", position: "relative" }}>
-              <svg viewBox="0 0 300 120" style={{ width: "100%" }}>
-                <path d="M20,100 Q80,20 150,60 Q220,100 280,80" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
-                <path d="M20,100 Q80,20 150,60 Q220,100 280,80 L280,100 L20,100 Z" fill="rgba(255,255,255,0.1)" />
-                <line x1={150} y1={0} x2={150} y2={120} stroke="#EF4444" strokeWidth={1.5} strokeDasharray="4,3" />
-                <circle cx={150} cy={60} r={6} fill="#EF4444" />
-                <text x={155} y={55} fontSize={9} fill="white">Centroid Point (z*)</text>
+            <div className="bg-black/20 rounded-xl p-4 sm:p-6 relative border border-white/10">
+              <svg viewBox="0 0 300 120" className="w-full h-auto drop-shadow-md">
+                <path d="M20,100 Q80,20 150,60 Q220,100 280,80" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth={2.5} />
+                <path d="M20,100 Q80,20 150,60 Q220,100 280,80 L280,100 L20,100 Z" fill="rgba(255,255,255,0.15)" />
+                <line x1={150} y1={0} x2={150} y2={120} stroke="#EF4444" strokeWidth={2} strokeDasharray="4,3" />
+                <circle cx={150} cy={60} r={6} fill="#EF4444" className="drop-shadow-lg" />
+                <text x={158} y={55} fontSize={10} fill="white" fontWeight="bold">Centroid Point (z*)</text>
               </svg>
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.5rem", border: "1px solid var(--border-color)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <Target size={16} color="var(--accent-blue)" />
-                <span style={{ fontSize: "0.75rem", color: "var(--accent-blue)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>The Formula</span>
+          <div className="flex flex-col gap-4">
+            <div className="bg-bg-secondary rounded-xl p-6 border border-border-color shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <Target size={18} className="text-accent-blue" />
+                <span className="text-[10px] sm:text-xs text-accent-blue font-bold uppercase tracking-wider">The Formula</span>
               </div>
-              <div style={{ fontFamily: "serif", fontSize: "1.2rem", textAlign: "center", padding: "0.5rem 0" }}>
+              <div className="font-serif text-lg sm:text-xl text-center py-4 bg-bg-primary rounded-lg border border-border-color">
                 z* = ∫ μ<sub>A</sub>(z) · z dz / ∫ μ<sub>A</sub>(z) dz
               </div>
             </div>
-            <div style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", padding: "1.5rem", border: "1px solid var(--border-color)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-                <BookOpen size={16} color="var(--accent-blue)" />
-                <span style={{ fontSize: "0.75rem", color: "var(--accent-blue)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Interpretation</span>
+            <div className="bg-bg-secondary rounded-xl p-6 border border-border-color shadow-sm flex-1">
+              <div className="flex items-center gap-2 mb-3">
+                <BookOpen size={18} className="text-accent-blue" />
+                <span className="text-[10px] sm:text-xs text-accent-blue font-bold uppercase tracking-wider">Interpretation</span>
               </div>
-              <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+              <p className="text-sm text-text-secondary leading-relaxed">
                 The result is a single crisp value that maps onto your personalized study plan, balancing every contributing factor from focus depth to break frequency.
               </p>
             </div>
@@ -213,94 +215,96 @@ export default function FuzzyLogicPage() {
         </motion.div>
 
         {/* Inference Rule Matrix */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-          style={{ marginBottom: "2rem" }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
-            <h2 style={{ fontSize: "1.3rem" }}>The Inference Rule Matrix</h2>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: "var(--radius-md)", padding: "6px 14px" }}>
-              <Search size={14} color="var(--text-muted)" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mb-12">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold font-serif">The Inference Rule Matrix</h2>
+            <div className="flex w-full sm:w-auto items-center gap-2 bg-bg-secondary border border-border-color rounded-lg px-3 py-2 shadow-sm">
+              <Search size={16} className="text-text-muted shrink-0" />
               <input type="text" placeholder="Search logic rules..." value={ruleSearch} onChange={(e) => setRuleSearch(e.target.value)}
-                style={{ border: "none", outline: "none", background: "none", fontSize: "0.82rem", color: "var(--text-primary)", width: 160 }}
+                className="bg-transparent border-none outline-none text-sm text-text-primary w-full sm:w-48"
               />
             </div>
           </div>
 
-          {ruleGroups.filter(g => g.title.toLowerCase().includes(ruleSearch.toLowerCase())).map((group) => (
-            <div key={group.id} style={{ background: "var(--bg-secondary)", borderRadius: "var(--radius-lg)", border: `1px solid ${group.active ? "var(--accent-blue)" : "var(--border-color)"}`, marginBottom: "0.75rem", overflow: "hidden" }}>
-              <button
-                onClick={() => setExpandedRule(expandedRule === group.id ? null : group.id)}
-                style={{ width: "100%", padding: "1rem 1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer", color: "var(--text-primary)" }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ width: 28, height: 28, borderRadius: "50%", background: group.active ? "var(--accent-blue)" : "var(--bg-primary)", color: group.active ? "white" : "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 700 }}>
-                    {String(group.id).padStart(2, "0")}
-                  </span>
-                  <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>{group.title}</span>
-                </div>
-                {expandedRule === group.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-              </button>
-              <AnimatePresence>
-                {expandedRule === group.id && (
-                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} style={{ overflow: "hidden" }}>
-                    <div style={{ padding: "0 1.25rem 1.25rem" }}>
-                      {group.rules.map((rule, ri) => (
-                        <div key={ri}>
-                          <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "1rem", lineHeight: 1.6 }}>
-                            {rule.condition.split(/(LOW|MEDIUM|HIGH|URGENT REVIEW|MAINTAIN PACE|OPTIMIZE DEEP WORK)/).map((part, pi) => {
-                              const highlighted = ["LOW", "MEDIUM", "HIGH", "URGENT REVIEW", "MAINTAIN PACE", "OPTIMIZE DEEP WORK"].includes(part);
-                              return highlighted ? (
-                                <span key={pi} style={{ background: part === "URGENT REVIEW" ? "#FEE2E2" : "var(--accent-blue-light)", color: part === "URGENT REVIEW" ? "var(--danger)" : "var(--accent-blue)", padding: "1px 8px", borderRadius: 4, fontWeight: 600, fontSize: "0.82rem" }}>{part}</span>
-                              ) : <span key={pi}>{part}</span>;
-                            })}
-                          </p>
-                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
-                            <div style={{ background: "var(--bg-primary)", borderRadius: "var(--radius-md)", padding: "1rem" }}>
-                              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.7rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-                                <span>Input Strength</span><span>{Math.round(rule.inputStrength * 100)}%</span>
+          <div className="flex flex-col gap-3">
+            {ruleGroups.filter(g => g.title.toLowerCase().includes(ruleSearch.toLowerCase())).map((group) => (
+              <div key={group.id} className={`bg-bg-secondary rounded-xl border overflow-hidden transition-colors ${group.active ? 'border-accent-blue shadow-sm' : 'border-border-color'}`}>
+                <button
+                  onClick={() => setExpandedRule(expandedRule === group.id ? null : group.id)}
+                  className="w-full p-4 sm:px-5 flex items-center justify-between bg-transparent border-none cursor-pointer text-text-primary hover:bg-bg-tertiary transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${group.active ? 'bg-accent-blue text-white' : 'bg-bg-primary text-text-muted border border-border-color'}`}>
+                      {String(group.id).padStart(2, "0")}
+                    </span>
+                    <span className="font-semibold text-sm sm:text-base text-left">{group.title}</span>
+                  </div>
+                  <div className="shrink-0 text-text-muted">
+                    {expandedRule === group.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                  </div>
+                </button>
+                <AnimatePresence>
+                  {expandedRule === group.id && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
+                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 pt-2 border-t border-border-color">
+                        {group.rules.map((rule, ri) => (
+                          <div key={ri}>
+                            <p className="text-sm text-text-secondary mb-4 leading-relaxed p-3 bg-bg-primary rounded-lg border border-border-light">
+                              {rule.condition.split(/(LOW|MEDIUM|HIGH|URGENT REVIEW|MAINTAIN PACE|OPTIMIZE DEEP WORK)/).map((part, pi) => {
+                                const highlighted = ["LOW", "MEDIUM", "HIGH", "URGENT REVIEW", "MAINTAIN PACE", "OPTIMIZE DEEP WORK"].includes(part);
+                                return highlighted ? (
+                                  <span key={pi} className={`px-1.5 py-0.5 rounded font-bold text-xs uppercase tracking-wider ${part === "URGENT REVIEW" ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>{part}</span>
+                                ) : <span key={pi}>{part}</span>;
+                              })}
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                              <div className="bg-bg-primary rounded-xl p-4 border border-border-color">
+                                <div className="flex justify-between text-[10px] text-text-muted uppercase tracking-wider font-bold mb-1">
+                                  <span>Input Strength</span><span>{Math.round(rule.inputStrength * 100)}%</span>
+                                </div>
+                                <p className="text-2xl font-bold font-serif">{rule.inputStrength.toFixed(2)} <span className="text-xs font-normal text-text-muted font-sans">Membership</span></p>
+                                <div className="w-full h-1.5 bg-border-color rounded-full mt-2 overflow-hidden">
+                                  <div className="h-full bg-accent-blue rounded-full" style={{ width: `${rule.inputStrength * 100}%` }} />
+                                </div>
                               </div>
-                              <p style={{ fontSize: "1.5rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>{rule.inputStrength.toFixed(2)} <span style={{ fontSize: "0.8rem", fontWeight: 400, color: "var(--text-muted)" }}>Membership</span></p>
-                              <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2, marginTop: 8 }}>
-                                <div style={{ width: `${rule.inputStrength * 100}%`, height: "100%", background: "var(--accent-blue)", borderRadius: 2 }} />
-                              </div>
-                            </div>
-                            <div style={{ background: "var(--bg-primary)", borderRadius: "var(--radius-md)", padding: "1rem" }}>
-                              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.7rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
-                                <span>Outcome Weight</span><span>{Math.round(rule.outcomeWeight * 100)}%</span>
-                              </div>
-                              <p style={{ fontSize: "1.5rem", fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>{rule.outcomeWeight.toFixed(2)} <span style={{ fontSize: "0.8rem", fontWeight: 400, color: "var(--text-muted)" }}>Influence</span></p>
-                              <div style={{ width: "100%", height: 4, background: "var(--border-color)", borderRadius: 2, marginTop: 8 }}>
-                                <div style={{ width: `${rule.outcomeWeight * 100}%`, height: "100%", background: "var(--warning)", borderRadius: 2 }} />
+                              <div className="bg-bg-primary rounded-xl p-4 border border-border-color">
+                                <div className="flex justify-between text-[10px] text-text-muted uppercase tracking-wider font-bold mb-1">
+                                  <span>Outcome Weight</span><span>{Math.round(rule.outcomeWeight * 100)}%</span>
+                                </div>
+                                <p className="text-2xl font-bold font-serif">{rule.outcomeWeight.toFixed(2)} <span className="text-xs font-normal text-text-muted font-sans">Influence</span></p>
+                                <div className="w-full h-1.5 bg-border-color rounded-full mt-2 overflow-hidden">
+                                  <div className="h-full bg-warning rounded-full" style={{ width: `${rule.outcomeWeight * 100}%` }} />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
 
-          <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
-            <a href="/calculator" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "10px 24px", background: "var(--accent-blue)", color: "white", borderRadius: 24, fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
-              View All 27 Logic Rules <ArrowRight size={14} />
+          <div className="text-center mt-6">
+            <a href="/calculator" className="inline-flex items-center gap-2 px-6 py-2.5 bg-accent-blue hover:bg-accent-blue-hover text-white rounded-full text-sm font-semibold no-underline transition-colors shadow-sm">
+              View All 27 Logic Rules <ArrowRight size={16} />
             </a>
           </div>
         </motion.div>
 
         {/* CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-          style={{ background: "var(--accent-blue-soft)", borderRadius: "var(--radius-xl)", padding: "3rem 2rem", textAlign: "center", marginBottom: "2rem" }}
+          className="bg-accent-blue-soft rounded-2xl p-8 sm:p-12 text-center mb-12 border border-border-color shadow-sm"
         >
-          <h2 style={{ fontSize: "1.5rem", marginBottom: 8 }}>Experience the Precision</h2>
-          <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", maxWidth: 500, margin: "0 auto 1.5rem", lineHeight: 1.6 }}>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 font-serif">Experience the Precision</h2>
+          <p className="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto mb-8 leading-relaxed">
             StudySync&apos;s fuzzy logic engine is currently processing over 1.2 million study sessions per day. Join the future of personalized education with Mamdani-based optimization.
           </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="/calculator" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "10px 24px", background: "var(--accent-blue)", color: "white", borderRadius: "var(--radius-md)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>Start Simulator</a>
-            <button style={{ padding: "10px 24px", background: "var(--bg-secondary)", color: "var(--text-primary)", borderRadius: "var(--radius-md)", fontSize: "0.85rem", fontWeight: 500, border: "1px solid var(--border-color)", cursor: "pointer" }}>Contact Research Team</button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/calculator" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-accent-blue hover:bg-accent-blue-hover text-white rounded-lg text-sm font-semibold no-underline transition-colors shadow-sm">Start Simulator</a>
+            <button className="px-6 py-3 bg-bg-secondary hover:bg-bg-tertiary text-text-primary rounded-lg text-sm font-semibold border border-border-color cursor-pointer transition-colors shadow-sm">Contact Research Team</button>
           </div>
         </motion.div>
       </div>
