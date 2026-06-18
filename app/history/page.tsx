@@ -348,9 +348,9 @@ export default function HistoryPage() {
                     paginatedSessions.map((session) => (
                       <tr key={session.id} style={{ borderBottom: "1px solid var(--border-light)" }}>
                         <td style={{ padding: "14px 16px", fontSize: "0.82rem" }}>
-                          {session.syncStatus === "syncing" && <RefreshCw size={14} color="var(--accent-blue)" className="animate-spin" title="Syncing" />}
-                          {session.syncStatus === "synced" && <Cloud size={14} color="var(--success, #10B981)" title="Synced with cloud" />}
-                          {session.syncStatus === "failed" && <CloudOff size={14} color="var(--danger, #EF4444)" title="Sync failed" />}
+                          {session.syncStatus === "syncing" && <RefreshCw size={14} color="var(--accent-blue)" className="animate-spin" aria-label="Syncing" role="img" />}
+                          {session.syncStatus === "synced" && <Cloud size={14} color="var(--success, #10B981)" aria-label="Synced with cloud" role="img" />}
+                          {session.syncStatus === "failed" && <CloudOff size={14} color="var(--danger, #EF4444)" aria-label="Sync failed" role="img" />}
                         </td>
                         <td style={{ padding: "14px 16px", fontSize: "0.82rem", color: "var(--text-primary)" }}>{formatTimestamp(session.timestamp)}</td>
                         <td style={{ padding: "14px 16px" }}>
