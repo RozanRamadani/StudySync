@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, Clock, Zap, BookOpen, Play, Brain, Timer, Lightbulb } from "lucide-react";
-import { calculateFuzzy, generateStudyTips, getCategoryLabel, FuzzyResult } from "@/lib/fuzzy-engine";
+import { generateStudyTips, getCategoryLabel, FuzzyResult } from "@/lib/fuzzy-engine";
 import { useStudySync } from "@/components/providers/StudySyncProvider";
 import { ConfidenceRing } from "@/components/ui/ConfidenceRing";
 import { TimerModal } from "@/components/timer/TimerModal";
@@ -17,15 +17,22 @@ const loadingSteps = [
 ];
 
 export default function CalculatorPage() {
-  const [focus, setFocus] = useState(85);
-  const [fatigue, setFatigue] = useState(20);
-  const [complexity, setComplexity] = useState(40);
+  const {
+    focus,
+    setFocus,
+    fatigue,
+    setFatigue,
+    complexity,
+    setComplexity,
+    fuzzyResult,
+    addSession,
+  } = useStudySync();
+
   const [result, setResult] = useState<FuzzyResult | null>(null);
   const [tips, setTips] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [showTimer, setShowTimer] = useState(false);
-  const { addSession, setLastResult, setLastInput } = useStudySync();
 
   const handleCalculate = useCallback(() => {
     setLoading(true);
@@ -38,22 +45,20 @@ export default function CalculatorPage() {
     });
 
     setTimeout(() => {
-      const input = { focus, fatigue, complexity };
-      const res = calculateFuzzy(input);
-      const genTips = generateStudyTips(res, input);
-      setResult(res);
+      const genTips = generateStudyTips(fuzzyResult, { focus, fatigue, complexity });
+      setResult(fuzzyResult);
       setTips(genTips);
-      setLastResult(res);
-      setLastInput(input);
       setLoading(false);
       addSession({
-        focus, fatigue, complexity,
-        duration: res.duration,
-        category: res.category,
-        confidence: res.confidence,
+        focus,
+        fatigue,
+        complexity,
+        duration: fuzzyResult.duration,
+        category: fuzzyResult.category,
+        confidence: fuzzyResult.confidence,
       });
     }, loadingSteps.length * stepDuration + 300);
-  }, [focus, fatigue, complexity, addSession, setLastResult, setLastInput]);
+  }, [focus, fatigue, complexity, fuzzyResult, addSession]);
 
   const categoryLabel = result ? getCategoryLabel(result.category) : null;
   const strongestRule = result?.activeRules.sort((a, b) => b.strength - a.strength)[0];

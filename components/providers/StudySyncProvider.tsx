@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
-import { FuzzyResult, FuzzyInput } from "@/lib/fuzzy-engine";
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef } from "react";
+import { calculateFuzzy, FuzzyResult } from "@/lib/fuzzy-engine";
 import { saveStudySession, getStudySessions } from "@/app/actions/session";
 import { toast } from "@/components/ui/Toaster";
+import { useMemo } from "react";
 
 export interface StudySession {
   id: string;
@@ -23,11 +24,16 @@ interface StudySyncContextType {
   addSession: (session: Omit<StudySession, "id" | "timestamp">) => void;
   retrySession: (session: StudySession) => void;
   clearSessions: () => void;
-  lastResult: FuzzyResult | null;
-  setLastResult: (result: FuzzyResult | null) => void;
-  lastInput: FuzzyInput | null;
-  setLastInput: (input: FuzzyInput | null) => void;
+  focus: number;
+  setFocus: (focus: number) => void;
+  fatigue: number;
+  setFatigue: (fatigue: number) => void;
+  complexity: number;
+  setComplexity: (complexity: number) => void;
+  fuzzyResult: FuzzyResult;
 }
+
+const defaultFuzzyResult = calculateFuzzy({ focus: 85, fatigue: 20, complexity: 40 });
 
 const StudySyncContext = createContext<StudySyncContextType>({
   sessions: [],
@@ -35,10 +41,13 @@ const StudySyncContext = createContext<StudySyncContextType>({
   addSession: () => {},
   retrySession: () => {},
   clearSessions: () => {},
-  lastResult: null,
-  setLastResult: () => {},
-  lastInput: null,
-  setLastInput: () => {},
+  focus: 85,
+  setFocus: () => {},
+  fatigue: 20,
+  setFatigue: () => {},
+  complexity: 40,
+  setComplexity: () => {},
+  fuzzyResult: defaultFuzzyResult,
 });
 
 export function useStudySync() {
@@ -83,8 +92,67 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const [lastResult, setLastResult] = useState<FuzzyResult | null>(null);
-  const [lastInput, setLastInput] = useState<FuzzyInput | null>(null);
+  const [focus, setFocus] = useState<number>(85);
+  const [fatigue, setFatigue] = useState<number>(20);
+  const [complexity, setComplexity] = useState<number>(40);
+
+  const fuzzyResult = useMemo(() => {
+    return calculateFuzzy({ focus, fatigue, complexity });
+  }, [focus, fatigue, complexity]);
+
+  const retrySessionRef = useRef<(session: StudySession) => void>(() => {});
+
+  const retrySession = useCallback((session: StudySession) => {
+    setSessions((prev) =>
+      prev.map((s) => (s.id === session.id ? { ...s, syncStatus: "syncing" } : s))
+    );
+
+    const sanitizedSession = {
+      ...session,
+      focus: Math.round(session.focus),
+      fatigue: Math.round(session.fatigue),
+      complexity: Math.round(session.complexity),
+    };
+
+    saveStudySession(sanitizedSession)
+      .then((res) => {
+        if (res.success && res.data) {
+          setSessions((prev) =>
+            prev.map((s) =>
+              s.id === session.id
+                ? { ...s, id: res.data.id, timestamp: new Date(res.data.created_at), syncStatus: "synced" }
+                : s
+            )
+          );
+          toast({
+            title: "Coba Lagi Berhasil",
+            description: "Sesi belajar Anda berhasil disimpan.",
+            type: "success"
+          });
+        } else {
+          throw new Error(res.error || "Unknown error");
+        }
+      })
+      .catch((err) => {
+        console.error("Retry failed:", err);
+        setSessions((prev) =>
+          prev.map((s) => (s.id === session.id ? { ...s, syncStatus: "failed" } : s))
+        );
+        toast({
+          title: "Coba Lagi Gagal",
+          description: "Masih tidak dapat menyimpan sesi Anda.",
+          type: "error",
+          action: {
+            label: "Coba Lagi",
+            onClick: () => retrySessionRef.current(session),
+          }
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    retrySessionRef.current = retrySession;
+  }, [retrySession]);
 
   const addSession = useCallback(
     (session: Omit<StudySession, "id" | "timestamp" | "syncStatus">) => {
@@ -140,63 +208,13 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
             type: "error",
             action: {
               label: "Coba Lagi",
-              onClick: () => retrySessionRef(newSession),
+              onClick: () => retrySession(newSession),
             }
           });
         });
     },
-    []
+    [retrySession]
   );
-
-  const retrySessionRef = (session: StudySession) => {
-    setSessions((prev) =>
-      prev.map((s) => (s.id === session.id ? { ...s, syncStatus: "syncing" } : s))
-    );
-
-    const sanitizedSession = {
-      ...session,
-      focus: Math.round(session.focus),
-      fatigue: Math.round(session.fatigue),
-      complexity: Math.round(session.complexity),
-    };
-
-    saveStudySession(sanitizedSession)
-      .then((res) => {
-        if (res.success && res.data) {
-          setSessions((prev) =>
-            prev.map((s) =>
-              s.id === session.id
-                ? { ...s, id: res.data.id, timestamp: new Date(res.data.created_at), syncStatus: "synced" }
-                : s
-            )
-          );
-          toast({
-            title: "Coba Lagi Berhasil",
-            description: "Sesi belajar Anda berhasil disimpan.",
-            type: "success"
-          });
-        } else {
-          throw new Error(res.error || "Unknown error");
-        }
-      })
-      .catch((err) => {
-        console.error("Retry failed:", err);
-        setSessions((prev) =>
-          prev.map((s) => (s.id === session.id ? { ...s, syncStatus: "failed" } : s))
-        );
-        toast({
-          title: "Coba Lagi Gagal",
-          description: "Masih tidak dapat menyimpan sesi Anda.",
-          type: "error",
-          action: {
-            label: "Coba Lagi",
-            onClick: () => retrySessionRef(session),
-          }
-        });
-      });
-  };
-
-  const retrySession = useCallback(retrySessionRef, []);
 
   const clearSessions = useCallback(() => {
     setSessions([]);
@@ -210,10 +228,13 @@ export function StudySyncProvider({ children }: { children: ReactNode }) {
         addSession,
         retrySession,
         clearSessions,
-        lastResult,
-        setLastResult,
-        lastInput,
-        setLastInput,
+        focus,
+        setFocus,
+        fatigue,
+        setFatigue,
+        complexity,
+        setComplexity,
+        fuzzyResult,
       }}
     >
       {children}

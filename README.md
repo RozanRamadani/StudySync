@@ -294,19 +294,14 @@ src/
 
 ## 🧪 Testing
 
-Project menggunakan pengujian Black Box untuk:
+Sistem pengujian yang digunakan saat ini adalah **Manual Black Box Testing**.
 
-* Authentication
-* Fuzzy Recommendation Engine
-* Session Management
-* History Tracking
-* Analytics Dashboard
-
-Total:
-
-```text
-20 Test Cases
-```
+Pengujian dilakukan secara manual pada seluruh alur utama aplikasi, termasuk:
+* Authentication (Login, Registrasi, Proteksi Halaman)
+* Fuzzy Recommendation Engine (Kalkulator & Visualisasi)
+* Session Management (Timer & Penyimpanan Sesi)
+* History Tracking (Riwayat Belajar)
+* Analytics Dashboard (Grafik & Statistik)
 
 ---
 
