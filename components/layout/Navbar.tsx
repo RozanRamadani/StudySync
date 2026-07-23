@@ -12,10 +12,12 @@ import { useStudySync } from "@/components/providers/StudySyncProvider";
 
 const navItems = [
   { href: "/", label: "Dashboard" },
-  { href: "/calculator", label: "Rekomendasi Belajar" },
-  { href: "/fuzzy-logic", label: "Logika Fuzzy" },
-  { href: "/study-tips", label: "Tips Belajar" },
-  { href: "/history", label: "Riwayat" },
+  { href: "/calculator", label: "Calculator" },
+  { href: "/study-tips", label: "Study Tips" },
+  { href: "/fuzzy-logic", label: "Fuzzy Logic" },
+  { href: "/intelligence", label: "Learning Intelligence" },
+  { href: "/history", label: "History" },
+  { href: "/settings", label: "Settings" },
 ];
 
 export function Navbar() {

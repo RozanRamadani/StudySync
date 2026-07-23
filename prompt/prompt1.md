@@ -1,488 +1,492 @@
-# Milestone 1.9 - Predictive Learning Intelligence (PLI)
+# StudySync v1.0 - Final Product Refinement (SRS)
 
-You are a Senior AI Product Architect, Data Scientist, Learning Analytics Specialist, UX Researcher, Product Manager, and Senior Frontend Engineer.
+You are a Senior Software Architect, Product Designer, UX Architect, QA Lead, Accessibility Engineer, and Frontend Engineer.
 
-StudySync already contains:
+StudySync is feature complete.
 
-- Mamdani Fuzzy Engine
-- Explainable AI Dashboard
-- AI Study Coach
-- AI Study Coach Pro
-- Adaptive Learning Intelligence
-- Analytics
-- History
-- Shared StudySyncProvider
+Your task is NOT to redesign the application.
 
-The current architecture is stable.
+Your task is to polish the existing product.
 
-Do NOT modify
+------------------------------------------------
 
-- calculateFuzzy()
-- Membership Functions
-- Rule Base
-- Defuzzification
-- StudySyncProvider
-- fuzzyResult
-- Adaptive Engine
-- Explainable AI Components
+# PRODUCT PRINCIPLE
 
-The objective of this milestone is NOT to predict the future with certainty.
+StudySync consists of several independent modules.
 
-Instead,
+Every module has its own responsibility.
 
-estimate future learning conditions using historical study patterns.
+Modules complement each other.
 
-Every prediction must clearly communicate
+Modules NEVER replace each other.
 
-that it is an estimate based on previous study sessions.
+Never merge unrelated modules.
 
-Never claim certainty.
+Never remove existing educational content.
 
-Never fabricate predictions when historical data is insufficient.
+------------------------------------------------
 
----
+# ENGINE RESPONSIBILITY
 
-# Product Vision
+Mamdani Fuzzy Engine
 
-Adaptive Intelligence answers
+↓
 
-"What happened?"
+Generate recommendation only.
 
-Predictive Intelligence answers
+Adaptive Engine
 
-"What is likely to happen if current habits continue?"
+↓
 
-All forecasts must remain transparent and explainable.
+Analyze historical study behavior.
 
----
+Predictive Engine
 
-# 1. Tomorrow Forecast
+↓
 
-Create a dashboard card.
+Estimate future learning trends.
 
-Display
+Decision Engine
 
-Predicted Focus
+↓
 
-Predicted Fatigue
+Generate alternative study strategies.
 
-Predicted Complexity
+None of these engines may perform another engine's responsibility.
 
-Estimated Recommended Duration
+------------------------------------------------
 
-Confidence Level
+# PAGE RESPONSIBILITY
 
-Confidence should represent
+Dashboard
 
-how consistent historical patterns are,
+Purpose
 
-NOT AI accuracy.
+Today's overview.
 
-Example
+Calculator
 
-Prediction based on
+Purpose
 
-18 previous sessions.
+Generate a recommendation.
 
-If historical data is insufficient,
+Fuzzy Logic
+
+Purpose
+
+Explain how the recommendation is calculated.
+
+Study Tips
+
+Purpose
+
+Teach learning techniques.
+
+Learning Intelligence
+
+Purpose
+
+Analyze historical behavior and predictions.
+
+History
+
+Purpose
+
+Display completed study sessions.
+
+Settings
+
+Purpose
+
+Manage application preferences.
+
+These responsibilities must never change.
+
+------------------------------------------------
+
+# ROUTING
+
+Routes must remain
+
+/
+
+Dashboard
+
+/calculator
+
+/fuzzy-logic
+
+/study-tips
+
+/intelligence
+
+/history
+
+/settings
+
+Never remove any route.
+
+Never redirect one module into another.
+
+------------------------------------------------
+
+# NAVIGATION
+
+Navbar MUST contain
+
+Dashboard
+
+Calculator
+
+Study Tips
+
+Fuzzy Logic
+
+Learning Intelligence
+
+History
+
+Settings
+
+Do NOT remove
+
+Study Tips
+
+Fuzzy Logic
+
+These pages remain first-class citizens.
+
+------------------------------------------------
+
+# DASHBOARD RULES
+
+Dashboard is NOT an analytics page.
+
+Dashboard is NOT a report page.
+
+Dashboard is NOT a calculator.
+
+Dashboard should only display
+
+Today's Coach
+
+Quick Stats
+
+Weekly Progress
+
+Recent Session
+
+Last Recommendation
+
+Quick Actions
+
+If there is no history,
 
 display
 
-Not enough historical data to estimate tomorrow's study condition.
+Start your first study session.
 
----
+Dashboard MUST NEVER generate a recommendation.
 
-# 2. Weekly Forecast
+Only Calculator may generate recommendations.
 
-Estimate
+------------------------------------------------
 
-Expected Study Hours
+# CALCULATOR RULES
 
-Expected Goal Completion
+Calculator remains the ONLY page that executes
 
-Expected Consistency
+calculateFuzzy().
 
-Expected Number of Sessions
+Workflow
 
-Display
-
-Optimistic
-
-Expected
-
-Conservative
-
-scenarios.
-
-Explain assumptions.
-
----
-
-# 3. Trend Forecast
-
-Forecast
-
-Focus Trend
-
-Fatigue Trend
-
-Recommendation Trend
-
-Consistency Trend
-
-Visualize
-
-Historical Trend
+User Input
 
 ↓
-
-Forecast Zone
-
-Clearly distinguish
-
-historical values
-
-from estimated values.
-
----
-
-# 4. Growth Projection
-
-Estimate
-
-Learning Progress
-
-Consistency
-
-Study Discipline
-
-Recovery Balance
-
-Example
-
-If your current study pattern continues,
-
-your consistency may improve to
-
-94%
-
-within four weeks.
-
-Never guarantee outcomes.
-
----
-
-# 5. Coach Evolution
-
-Upgrade the AI Coach.
-
-Examples
-
-Compared with last month,
-
-your recommended duration increased
-
-from 58 minutes
-
-to
-
-74 minutes.
-
-↓
-
-Your focus has steadily improved.
-
-↓
-
-You may be ready for longer deep work sessions.
-
-Explain every conclusion.
-
----
-
-# 6. Adaptive Difficulty Recommendation
-
-Analyze
-
-Difficulty history
-
-Completion history
-
-Fatigue history
-
-Examples
-
-You consistently perform well on difficult material.
-
-↓
-
-Maintaining a challenging study level appears appropriate.
-
-or
-
-High complexity has recently reduced your completion rate.
-
-↓
-
-Consider alternating difficult and moderate sessions.
-
----
-
-# 7. Smart Reminder Prediction
-
-Estimate
-
-Preferred Study Time
-
-Display
-
-You usually begin studying around
-
-08:00.
-
-Consider starting within the next 20 minutes.
-
-This should be generated from historical behavior.
-
----
-
-# 8. What-If Simulation
-
-Allow users to simulate
-
-different study conditions.
-
-Examples
-
-Focus
-
-80 → 90
-
-Fatigue
-
-40 → 20
-
-Complexity
-
-70 → 50
-
-Display
-
-Estimated Recommendation
-
-Estimated Readiness
-
-Estimated Energy
-
-Explain
-
-Which variables changed.
-
-Why the estimated recommendation differs.
-
-This simulation must use
 
 calculateFuzzy()
 
-with simulated inputs only.
-
-Do NOT overwrite
-
-actual session data.
-
----
-
-# 9. Alternative Recommendations
-
-Generate
-
-Best Case
-
-Expected Case
-
-Recovery Case
-
-Examples
-
-If fatigue decreases,
-
 ↓
-
-Longer session becomes feasible.
-
-If focus decreases,
-
-↓
-
-Shorter focused session may be preferable.
-
----
-
-# 10. Forecast Explanation
-
-Every prediction must include
-
-Why am I seeing this?
-
-Examples
-
-Based on
-
-20 previous sessions
-
-Average focus increased
-
-6%
-
-Average fatigue remained stable
-
-Consistency
-
-91%
-
-Historical variation
-
-Low
-
-Never display predictions without explanation.
-
----
-
-# 11. Forecast Reliability
-
-Display
-
-Low
-
-Medium
-
-High
-
-based on
-
-Number of Sessions
-
-Consistency
-
-Historical Variability
-
-Explain
-
-Higher reliability means your historical study habits have been relatively stable.
-
-Do NOT refer to this as AI confidence or model certainty.
-
----
-
-# 12. Interactive Timeline
-
-Allow users to compare
-
-Past
-
-↓
-
-Present
-
-↓
-
-Estimated Future
-
-Display
-
-Focus
-
-Fatigue
-
-Complexity
 
 Recommendation
 
-Consistency
+↓
 
-Use smooth animations.
-
----
-
-# 13. Prediction History
-
-Store
-
-previous forecasts
-
-without affecting study history.
-
-Allow users to compare
-
-Predicted
+Decision Dashboard
 
 ↓
 
-Actual
+User selects plan
 
-Display
+↓
 
-Prediction Accuracy Report
+Session saved
+
+Never move this workflow elsewhere.
+
+------------------------------------------------
+
+# DECISION SUPPORT RULES
+
+Decision Support has TWO different purposes.
+
+Runtime Decision Support
+
+Location
+
+Calculator
+
+Purpose
+
+Allow users to choose a study plan before saving.
+
+Historical Decision Analysis
+
+Location
+
+Learning Intelligence
+
+Purpose
+
+Analyze previously selected plans.
+
+Do NOT move the interactive Decision Dashboard away from Calculator.
+
+------------------------------------------------
+
+# LEARNING INTELLIGENCE RULES
+
+Learning Intelligence is an analysis center.
+
+Contains
+
+Learning Profile
+
+Adaptive Intelligence
+
+Predictive Intelligence
+
+Decision Analysis
+
+Pattern Recognition
+
+Burnout Detection
+
+Forecast
+
+Reports
+
+Session Comparison
+
+What-if Simulation
+
+Learning Intelligence MUST NOT contain
+
+Fuzzy Logic
+
+Study Tips
+
+Calculator
+
+------------------------------------------------
+
+# FUZZY LOGIC RULES
+
+The Fuzzy Logic page is an educational and technical reference.
+
+Purpose
 
 Explain
 
-How close previous estimates were.
+Membership Functions
 
-Use this only as feedback.
+Rule Base
 
-Do NOT retrain the fuzzy engine.
+Inference Pipeline
 
----
+Aggregation
 
-# 14. Transparency
+Defuzzification
 
-Create
+Interactive Rule Matrix
 
-Prediction Information
+Explainable AI
 
-Explain
+Research Mode
 
-These forecasts are estimates based on historical learning patterns.
+Do NOT simplify this page.
 
-They are intended to support planning,
+Do NOT move its contents.
 
-not to predict the future with certainty.
+------------------------------------------------
 
----
+# STUDY TIPS RULES
 
-# Performance
+Study Tips is an educational library.
 
-Continue executing
+Purpose
 
-calculateFuzzy()
+Teach effective learning methods.
 
-exactly once
+Examples
 
-for actual recommendations.
+Pomodoro
 
-Use memoization.
+Deep Work
 
-Avoid expensive recalculations.
+Active Recall
 
-Reuse Adaptive Engine utilities whenever possible.
+Spaced Repetition
 
----
+Cornell Notes
 
-# Deliverables
+Feynman Technique
+
+Memory Palace
+
+Exam Preparation
+
+Time Management
+
+The AI Coach may reference these methods,
+
+but the Study Tips page remains an independent educational resource.
+
+Never merge Study Tips into Learning Intelligence.
+
+------------------------------------------------
+
+# LEARNING INTELLIGENCE CENTER
+
+Organize with tabs.
+
+Overview
+
+Adaptive
+
+Predictive
+
+Decision Analysis
+
+Reports
+
+Simulation
+
+Decision Dashboard MUST NOT appear here.
+
+Only analytical decision reports belong here.
+
+------------------------------------------------
+
+# DESIGN SYSTEM
+
+Standardize
+
+Cards
+
+Buttons
+
+Tabs
+
+Dialogs
+
+Typography
+
+Spacing
+
+Animations
+
+Colors
+
+Responsive Layout
+
+Do NOT change business logic.
+
+------------------------------------------------
+
+# SETTINGS
+
+Include
+
+Appearance
+
+Accessibility
+
+Notifications
+
+Learning Memory
+
+Privacy
+
+Export
+
+Reset Data
+
+Forecast Preferences
+
+------------------------------------------------
+
+# DOCUMENTATION
+
+Update
+
+README
+
+Architecture
+
+Developer Guide
+
+User Guide
+
+Architecture documentation must explain
+
+Why each page exists.
+
+Why each engine exists.
+
+Why they are separated.
+
+------------------------------------------------
+
+# VERIFICATION
+
+Before implementation verify
+
+No routes removed.
+
+No pages removed.
+
+No features removed.
+
+No engines modified.
+
+No educational content removed.
+
+Calculator remains the only recommendation generator.
+
+Dashboard remains an overview page.
+
+Learning Intelligence remains an analysis center.
+
+Study Tips remains an educational library.
+
+Fuzzy Logic remains a scientific explanation page.
+
+------------------------------------------------
+
+# DELIVERABLES
 
 Before implementation
 
-Review the current Adaptive Learning Intelligence architecture.
+1. Review architecture.
 
-Identify reusable utilities.
+2. Explain page responsibilities.
 
-Design the Predictive Intelligence module.
+3. Explain engine responsibilities.
 
-Explain forecasting methodology.
+4. List affected files.
 
-List every new component.
-
-Describe transparency measures.
+5. Explain why no modules are being merged.
 
 Then implement.
 
@@ -490,18 +494,16 @@ Finally provide
 
 Files Modified
 
-New Components
+UI Changes
 
-New Utilities
+Navigation Changes
 
-Forecast Methodology
+Architecture Validation
 
-Performance Improvements
+Performance Validation
 
-Accessibility Improvements
-
-Responsive Improvements
+Accessibility Validation
 
 Verification Checklist
 
-The completed feature should make StudySync feel like a transparent, explainable, and predictive learning companion that helps users plan future study sessions while preserving the Mamdani Fuzzy Engine as the single recommendation core.
+The final result should feel like a polished educational platform with clearly separated responsibilities, preserving all existing educational and AI features while improving usability, maintainability, and consistency.
