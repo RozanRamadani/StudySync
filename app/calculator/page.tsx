@@ -7,6 +7,7 @@ import { generateStudyTips, getCategoryLabel, FuzzyResult } from "@/lib/fuzzy-en
 import { useStudySync } from "@/components/providers/StudySyncProvider";
 import { ConfidenceRing } from "@/components/ui/ConfidenceRing";
 import { AIStudyCoachDashboard } from "@/components/coach/AIStudyCoachDashboard";
+import { DecisionDashboard } from "@/components/decision/DecisionDashboard";
 
 const loadingSteps = [
   "Menganalisis intensitas fokus...",
@@ -48,16 +49,21 @@ export default function CalculatorPage() {
       setResult(fuzzyResult);
       setTips(genTips);
       setLoading(false);
-      addSession({
-        focus,
-        fatigue,
-        complexity,
-        duration: fuzzyResult.duration,
-        category: fuzzyResult.category,
-        confidence: fuzzyResult.confidence,
-      });
+      // We no longer addSession here. The user must explicitly choose a plan.
     }, loadingSteps.length * stepDuration + 300);
-  }, [focus, fatigue, complexity, fuzzyResult, addSession]);
+  }, [focus, fatigue, complexity, fuzzyResult]);
+
+  const handleAddSession = useCallback((selectedDuration: number) => {
+    if (!result) return;
+    addSession({
+      focus,
+      fatigue,
+      complexity,
+      duration: selectedDuration,
+      category: result.category,
+      confidence: result.confidence,
+    });
+  }, [focus, fatigue, complexity, result, addSession]);
 
   const categoryLabel = result ? getCategoryLabel(result.category) : null;
   const strongestRule = result?.activeRules.sort((a, b) => b.strength - a.strength)[0];
@@ -140,42 +146,43 @@ export default function CalculatorPage() {
             )}
           </AnimatePresence>
 
-          {/* Recommendation Panel */}
+          {/* Decision Dashboard - The core of Milestone 2 */}
           {!loading && result && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="bg-bg-secondary rounded-2xl p-6 sm:p-8 border border-border-color shadow-md w-full"
-            >
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 sm:gap-4 mb-8">
-                <div>
-                  <p className="text-sm text-text-muted mb-1 font-serif">Rekomendasi</p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl sm:text-6xl font-bold font-serif text-text-primary">{result.duration}</span>
-                    <span className="text-xl sm:text-2xl font-semibold font-serif text-accent-blue">Menit</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {(["Pendek", "Ideal", "Panjang"] as const).map((cat) => (
-                      <span key={cat} className={`px-4 py-1.5 rounded-full text-xs font-medium border ${cat === categoryLabel ? 'bg-accent-blue text-white border-accent-blue' : 'bg-bg-primary text-text-secondary border-border-color'}`}>
-                        {cat}
-                      </span>
-                    ))}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full">
+              <DecisionDashboard onSelectPlan={handleAddSession} />
+            </motion.div>
+          )}
+
+          {/* Legacy Explainability (Membership & Active Rule) - Pushed to bottom as Advanced Info */}
+          {!loading && result && strongestRule && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="mt-8 pt-8 border-t border-border-color print:hidden">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-text-secondary"><Brain size={18} /> Advanced Fuzzy Logic Explainability</h3>
+              <div className="bg-bg-secondary rounded-2xl p-6 border border-border-color shadow-sm w-full mb-6">
+                <div className="flex items-center gap-3 mb-4 flex-wrap">
+                  <span className="bg-accent-blue text-white px-2.5 py-1 rounded-md text-xs font-bold shrink-0">RULE #{strongestRule.id}</span>
+                  <span className="text-xs font-semibold tracking-wider text-text-muted">ACTIVE LOGIC PATH</span>
+                  <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-4 text-xs">
+                    <span className="text-accent-blue">● Alpha: {strongestRule.strength.toFixed(2)}</span>
+                    <span className="text-warning">● Inf: {result.confidence}%</span>
                   </div>
                 </div>
-                <div className="self-center sm:self-auto shrink-0">
-                   <ConfidenceRing value={result.confidence} />
-                </div>
+                <p className="font-serif text-lg italic leading-relaxed text-text-primary">
+                  &quot;IF <span className="text-accent-blue underline decoration-2 underline-offset-4">Fokus {strongestRule.focus === "high" ? "Tinggi" : strongestRule.focus === "medium" ? "Sedang" : "Rendah"}</span> AND{" "}
+                  <span className="text-accent-blue underline decoration-2 underline-offset-4">Kelelahan {strongestRule.fatigue === "high" ? "Tinggi" : strongestRule.fatigue === "medium" ? "Sedang" : "Rendah"}</span> THEN{" "}
+                  <span className="text-accent-blue underline decoration-2 underline-offset-4">Durasi {strongestRule.output === "sangatPanjang" ? "Sangat Lama" : strongestRule.output === "panjang" ? "Lama" : strongestRule.output === "sedang" ? "Sedang" : strongestRule.output === "pendek" ? "Pendek" : "Sangat Pendek"}</span>&quot;
+                </p>
               </div>
 
-              {/* Membership Analytics */}
-              <div className="mt-8 border-t border-border-color pt-6">
+              <div className="bg-bg-secondary rounded-2xl p-6 border border-border-color shadow-sm w-full">
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen size={16} className="text-accent-blue" />
-                  <span className="font-semibold text-base">Analisis Keanggotaan</span>
+                  <span className="font-semibold text-base">Membership Analysis</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {[
-                    { label: "Fokus: " + (focus >= 50 ? "Tinggi" : focus >= 25 ? "Sedang" : "Rendah"), mu: Math.max(result.focusMembership.low, result.focusMembership.medium, result.focusMembership.high) },
-                    { label: "Lelah: " + (fatigue >= 50 ? "Tinggi" : fatigue >= 25 ? "Sedang" : "Rendah"), mu: Math.max(result.fatigueMembership.low, result.fatigueMembership.medium, result.fatigueMembership.high) },
-                    { label: "Materi: " + (complexity >= 50 ? "Sulit" : complexity >= 25 ? "Sedang" : "Mudah"), mu: Math.max(result.complexityMembership.low, result.complexityMembership.medium, result.complexityMembership.high) },
+                    { label: "Focus: " + (focus >= 50 ? "Tinggi" : focus >= 25 ? "Sedang" : "Rendah"), mu: Math.max(result.focusMembership.low, result.focusMembership.medium, result.focusMembership.high) },
+                    { label: "Fatigue: " + (fatigue >= 50 ? "Tinggi" : fatigue >= 25 ? "Sedang" : "Rendah"), mu: Math.max(result.fatigueMembership.low, result.fatigueMembership.medium, result.fatigueMembership.high) },
+                    { label: "Complexity: " + (complexity >= 50 ? "Sulit" : complexity >= 25 ? "Sedang" : "Mudah"), mu: Math.max(result.complexityMembership.low, result.complexityMembership.medium, result.complexityMembership.high) },
                   ].map((item, i) => (
                     <div key={i} className="bg-bg-primary rounded-xl p-4 border border-border-color">
                       <p className="text-xs sm:text-sm text-text-secondary mb-2">{item.label}</p>
@@ -188,56 +195,6 @@ export default function CalculatorPage() {
                 </div>
               </div>
             </motion.div>
-          )}
-
-          {/* Active Logic Path */}
-          {!loading && result && strongestRule && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="bg-bg-secondary rounded-2xl p-6 border border-border-color shadow-sm w-full"
-            >
-              <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <span className="bg-accent-blue text-white px-2.5 py-1 rounded-md text-xs font-bold shrink-0">RULE #{strongestRule.id}</span>
-                <span className="text-xs font-semibold tracking-wider text-text-muted">JALUR LOGIKA AKTIF</span>
-                <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-4 text-xs">
-                  <span className="text-accent-blue">● Alpha: {strongestRule.strength.toFixed(2)}</span>
-                  <span className="text-warning">● Inf: {result.confidence}%</span>
-                </div>
-              </div>
-              <p className="font-serif text-lg sm:text-xl italic leading-relaxed text-text-primary">
-                &quot;IF <span className="text-accent-blue underline decoration-2 underline-offset-4">Fokus {strongestRule.focus === "high" ? "Tinggi" : strongestRule.focus === "medium" ? "Sedang" : "Rendah"}</span> AND{" "}
-                <span className="text-accent-blue underline decoration-2 underline-offset-4">Kelelahan {strongestRule.fatigue === "high" ? "Tinggi" : strongestRule.fatigue === "medium" ? "Sedang" : "Rendah"}</span> THEN{" "}
-                <span className="text-accent-blue underline decoration-2 underline-offset-4">Durasi {strongestRule.output === "sangatPanjang" ? "Sangat Lama" : strongestRule.output === "panjang" ? "Lama" : strongestRule.output === "sedang" ? "Sedang" : strongestRule.output === "pendek" ? "Pendek" : "Sangat Pendek"}</span>&quot;
-              </p>
-            </motion.div>
-          )}
-
-          {/* AI Study Coach Dashboard */}
-          {!loading && result && (
-            <AIStudyCoachDashboard fuzzyResult={result} input={{ focus, fatigue, complexity }} />
-          )}
-
-          {/* Stats Cards */}
-          {!loading && result && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-                {[
-                  { icon: <Zap size={22} className="text-accent-blue" />, value: `${Math.round(result.confidence * 0.95)}%`, label: "Efisiensi Fokus", bars: result.confidence },
-                  { icon: <Timer size={22} className="text-accent-blue" />, value: `${Math.max(5, Math.round(result.duration * 0.1))}m`, label: "Saran Istirahat", bars: 60 },
-                  { icon: <BookOpen size={22} className="text-accent-blue" />, value: result.duration >= 90 ? "Dalam" : result.duration >= 50 ? "Sedang" : "Ringan", label: "Mode Belajar", bars: Math.min(100, result.duration) },
-                ].map((card, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}
-                    className="bg-bg-secondary rounded-xl p-5 border border-border-color text-center w-full shadow-sm"
-                  >
-                    <div className="mx-auto mb-3 flex justify-center">{card.icon}</div>
-                    <p className="text-2xl sm:text-3xl font-bold font-serif mb-1">{card.value}</p>
-                    <p className="text-xs text-text-muted mb-3">{card.label}</p>
-                    <div className="flex justify-center gap-1">
-                      {[...Array(5)].map((_, j) => (
-                        <div key={j} className={`w-1.5 h-4 rounded-sm ${j < Math.ceil(card.bars / 20) ? 'bg-accent-blue' : 'bg-border-color'}`} />
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
           )}
 
           {/* Empty State */}
