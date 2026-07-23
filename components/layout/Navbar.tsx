@@ -11,6 +11,7 @@ import { signout } from "@/app/actions/auth";
 import { useStudySync } from "@/components/providers/StudySyncProvider";
 
 const navItems = [
+  { href: "/", label: "Dashboard" },
   { href: "/calculator", label: "Rekomendasi Belajar" },
   { href: "/fuzzy-logic", label: "Logika Fuzzy" },
   { href: "/study-tips", label: "Tips Belajar" },

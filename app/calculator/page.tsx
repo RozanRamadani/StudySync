@@ -6,7 +6,7 @@ import { SlidersHorizontal, Clock, Zap, BookOpen, Play, Brain, Timer, Lightbulb 
 import { generateStudyTips, getCategoryLabel, FuzzyResult } from "@/lib/fuzzy-engine";
 import { useStudySync } from "@/components/providers/StudySyncProvider";
 import { ConfidenceRing } from "@/components/ui/ConfidenceRing";
-import { TimerModal } from "@/components/timer/TimerModal";
+import { AIStudyCoachDashboard } from "@/components/coach/AIStudyCoachDashboard";
 
 const loadingSteps = [
   "Menganalisis intensitas fokus...",
@@ -32,7 +32,6 @@ export default function CalculatorPage() {
   const [tips, setTips] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
-  const [showTimer, setShowTimer] = useState(false);
 
   const handleCalculate = useCallback(() => {
     setLoading(true);
@@ -115,22 +114,7 @@ export default function CalculatorPage() {
             </motion.button>
           </motion.div>
 
-          {/* AI Insights Card */}
-          <AnimatePresence>
-            {result && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.2 }}
-                className="mt-6 bg-accent-blue rounded-2xl p-6 text-white w-full shadow-md"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <Lightbulb size={18} />
-                  <span className="font-semibold text-base">Wawasan Belajar AI</span>
-                </div>
-                <p className="text-sm opacity-90 leading-relaxed italic">
-                  &quot;{tips}&quot;
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* AI Insights Card removed in favor of AIStudyCoachDashboard */}
         </div>
 
         {/* RIGHT: Results */}
@@ -227,9 +211,13 @@ export default function CalculatorPage() {
             </motion.div>
           )}
 
-          {/* Stats Cards & Start Session */}
+          {/* AI Study Coach Dashboard */}
           {!loading && result && (
-            <>
+            <AIStudyCoachDashboard fuzzyResult={result} input={{ focus, fatigue, complexity }} />
+          )}
+
+          {/* Stats Cards */}
+          {!loading && result && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 {[
                   { icon: <Zap size={22} className="text-accent-blue" />, value: `${Math.round(result.confidence * 0.95)}%`, label: "Efisiensi Fokus", bars: result.confidence },
@@ -250,15 +238,6 @@ export default function CalculatorPage() {
                   </motion.div>
                 ))}
               </div>
-
-              <motion.button
-                whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-                onClick={() => setShowTimer(true)}
-                className="w-full p-4 sm:p-5 rounded-xl bg-accent-blue hover:bg-accent-blue-hover text-white border-none cursor-pointer text-lg font-bold flex items-center justify-center gap-3 font-serif transition-colors shadow-md"
-              >
-                <Play size={22} /> Mulai Sesi Belajar
-              </motion.button>
-            </>
           )}
 
           {/* Empty State */}
@@ -275,12 +254,6 @@ export default function CalculatorPage() {
           )}
         </div>
       </div>
-
-      <AnimatePresence>
-        {showTimer && result && (
-          <TimerModal duration={result.duration} onClose={() => setShowTimer(false)} />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

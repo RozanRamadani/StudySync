@@ -1,318 +1,435 @@
-# Enhancement Plan - Interactive Mamdani Fuzzy Logic Visualization
+# Milestone 1.5 - AI Study Coach Enhancement
 
-You are a Senior Frontend Engineer, UI/UX Engineer, Data Visualization Engineer, and AI Visualization Specialist.
+You are a Senior Product Designer, Senior Frontend Engineer, UX Engineer, AI Product Designer, and Software Architect.
 
-The Mamdani Fuzzy Engine architecture has already been completed and verified.
+The current StudySync project already contains:
 
-The following components are already implemented:
+- Mamdani Fuzzy Engine
+- Explainable AI Dashboard
+- AI Study Coach
+- Study Plan Timeline
+- Smart Study Tips
+- Recommendation Summary
+- Shared StudySyncProvider
+- Analytics
+- History
 
-- Global StudySyncProvider
-- Shared fuzzyResult
-- Single Source of Truth
-- Calculator synchronization
-- Dynamic Rule Matrix
-- Dynamic Centroid Visualization
-- Analytics integration
-- History integration
+All of these modules are stable.
 
 Do NOT modify:
 
 - calculateFuzzy()
-- fuzzy rules
-- membership functions
-- inference algorithm
-- defuzzification algorithm
-- StudySyncProvider architecture
+- fuzzyResult
+- Mamdani Rule Base
+- Membership Functions
+- Defuzzification
+- Explainable AI Components
+- Existing Architecture
 
-Your task is ONLY to improve the visualization, educational value, and user experience of the Fuzzy Logic page.
-
----
-
-# Objective
-
-Transform the Fuzzy Logic page into an interactive learning dashboard that allows users to understand exactly how the Mamdani inference engine produces a recommendation.
-
-The page should explain the reasoning behind the recommendation rather than only displaying the final result.
+The objective is to polish the AI Study Coach into a professional, intelligent, and user-friendly coaching experience.
 
 ---
 
-# 1. Rule Explanation Panel
+# 1. Dynamic Session Scheduler
 
-When the user selects a rule from the Rule Matrix, display a detailed explanation panel.
+Upgrade the existing Study Plan Timeline.
 
-Display:
+Allow the user to optionally specify:
 
-Rule ID
+- Start Time
 
-IF
+Example
 
-Focus = ...
+08:00
 
-Fatigue = ...
+Automatically calculate
 
-Complexity = ...
+Study Start
 
-THEN
+↓
 
-Study Duration = ...
+Study End
 
-Membership Values
+↓
+
+Break Start
+
+↓
+
+Break End
+
+↓
+
+Review Start
+
+↓
+
+Review End
+
+↓
+
+Next Session
+
+All times should be calculated dynamically.
+
+If no start time is provided,
+
+use the current system time.
+
+Animate the timeline using Framer Motion.
+
+---
+
+# 2. Study Readiness Score
+
+Create a new card.
+
+Title
+
+Study Readiness
+
+Display
+
+High
+
+Medium
+
+Low
+
+with a circular progress indicator.
+
+Calculate the readiness score using the existing fuzzy inputs.
+
+Possible considerations
+
+- Focus
+- Fatigue
+- Complexity
+
+Explain clearly that this score represents study readiness based on the current fuzzy inputs.
+
+Do NOT describe it as AI accuracy or prediction confidence.
+
+---
+
+# 3. Mental Energy Meter
+
+Add a visual energy meter.
+
+Display
+
+Mental Energy
+
+████████░░
+
+82%
+
+Animate changes smoothly.
+
+The value should respond dynamically to
 
 Focus
 
-Low
-
-Medium
-
-High
-
 Fatigue
-
-Low
-
-Medium
-
-High
 
 Complexity
 
-Easy
-
-Medium
-
-Hard
-
-Firing Strength
-
-α = min(...)
-
-Output Fuzzy Set
-
-Rule Status
-
-✓ Active Rule
-
-or
-
-Inactive Rule
-
-If available, display the rule's contribution to the final centroid calculation.
-
-The panel must use real engine data.
-
-Never use placeholder values.
+Use intuitive colors and icons.
 
 ---
 
-# 2. Fuzzy Inference Pipeline
+# 4. Adaptive Pomodoro Recommendation
 
-Add an animated pipeline that visualizes every stage of the Mamdani inference process.
+Generate a Pomodoro schedule based on the recommended study duration.
 
-Example:
-
-Input Values
-
-↓
-
-Membership Functions
-
-↓
-
-Rule Evaluation
-
-↓
-
-Aggregation
-
-↓
-
-Defuzzification (Centroid)
-
-↓
-
-Final Recommendation
-
-Each stage should animate sequentially using Framer Motion.
-
-The visualization must update automatically whenever Calculator inputs change.
-
----
-
-# 3. Live Membership Function Graph
-
-Upgrade the membership function visualization.
-
-Requirements
-
-Display the actual membership curves.
-
-When Focus, Fatigue, or Complexity changes:
-
-- move an indicator point on the curve
-- display the current x-value
-- display the current membership degree
-
-Example
-
-Focus = 83
-
-High Membership = 0.82
-
-The graph should animate smoothly.
-
-Never display static graphs.
-
----
-
-# 4. Rule Statistics
-
-Add a statistics card.
-
-Display:
-
-Total Rules
-
-(using fuzzyResult.allRules.length)
-
-Active Rules
-
-Inactive Rules
-
-Highest α
-
-Average α
-
-Dominant Output Category
-
-Recommended Duration
-
-Everything must come from fuzzyResult.
-
----
-
-# 5. Animated Centroid
-
-Improve the centroid visualization.
-
-Instead of instantly changing position,
-
-animate the centroid marker using Framer Motion.
-
-Display:
-
-Centroid Value
-
-Rounded Recommendation
-
-Example
-
-74.3
-
-↓
+Examples
 
 74 Minutes
 
-Animate the movement smoothly.
+↓
 
----
+25
 
-# 6. Membership Tooltips
+↓
 
-When hovering over any membership value:
+5
 
-Display a tooltip.
+↓
 
-Example
+25
 
-High
+↓
 
-Membership Degree
+5
 
-0.82
+↓
 
-This input strongly belongs to the High Focus fuzzy set.
-
-Use Shadcn Tooltip.
-
----
-
-# 7. Live Engine Status
-
-Add a small status badge.
-
-Example
-
-🟢 Live Mamdani Engine
+19
 
 or
 
-✓ Synced with Calculator
+90 Minutes
 
-This badge should indicate that all values are synchronized with the Calculator page.
+↓
 
----
+30
 
-# 8. Empty State
+↓
 
-If there are no active rules,
+5
 
-display a friendly empty state.
+↓
 
-Example
+30
 
-No active rules for the current input.
+↓
 
-Adjust Focus, Fatigue, or Complexity to activate fuzzy rules.
+5
 
----
+↓
 
-# 9. Rule Filtering
+20
 
-Add optional filters.
+Explain why this Pomodoro structure was selected.
 
-Filter by:
+Do not hardcode.
 
-- Active Rules
-- Inactive Rules
-- Output Category
-- Highest α
-
-Add a search box.
-
-Users should be able to search:
-
-Rule ID
-
-or
-
-Output Category.
+Generate dynamically.
 
 ---
 
-# 10. Accessibility
+# 5. Adaptive Break Recommendation
 
-Improve accessibility.
+Expand the Break card.
 
-Requirements
+Instead of only displaying
 
-- Keyboard navigation
-- Screen reader labels
-- ARIA attributes
-- Focus indicators
-- High contrast support
+10 Minutes
+
+display
+
+Break Duration
+
+↓
+
+Suggested Activities
+
+Examples
+
+Drink Water
+
+Stretch
+
+Walk Around
+
+Deep Breathing
+
+Rest Eyes
+
+Avoid Phone Usage
+
+Recommendations should depend on fatigue level.
 
 ---
 
-# 11. Responsive Design
+# 6. Estimated Finish Time
 
-The visualization must remain responsive.
+Display
+
+Current Time
+
+Estimated Finish
+
+Remaining Duration
+
+Update automatically whenever the study duration changes.
+
+---
+
+# 7. Study Environment Checklist
+
+Before starting a study session,
+
+display a checklist.
+
+Examples
+
+Water Ready
+
+Phone Silent
+
+Notebook Ready
+
+Learning Material Ready
+
+Comfortable Workspace
+
+Timer Ready
+
+Allow users to check each item.
+
+Persist the checklist only for the current session.
+
+---
+
+# 8. Motivation Card
+
+Generate motivational content based on the current study condition.
+
+Examples
+
+High Focus
+
+↓
+
+You're ready for deep work.
+Take advantage of your current concentration.
+
+High Fatigue
+
+↓
+
+Your body needs recovery.
+A short break now can improve your learning quality.
+
+Hard Material
+
+↓
+
+Challenging topics require persistence.
+Small consistent progress is better than rushing.
+
+Rotate motivational messages to avoid repetition.
+
+---
+
+# 9. Session Overview Card
+
+Create a summary card.
+
+Display
+
+Study Duration
+
+Break Duration
+
+Review Duration
+
+Estimated Finish Time
+
+Pomodoro Sessions
+
+Readiness Level
+
+This card should summarize the entire study session.
+
+---
+
+# 10. One-Click Start
+
+Improve the Start Session experience.
+
+Instead of simply starting the timer,
+
+display
+
+Today's Plan
+
+↓
+
+Estimated Finish
+
+↓
+
+Checklist Status
+
+↓
+
+Start Session
+
+Only enable the Start button when
+
+the required checklist items have been completed
+
+(optional setting).
+
+---
+
+# 11. Session Completion Preview
+
+Before the session starts,
+
+display
+
+Today's Goal
+
+↓
+
+Expected Outcome
+
+↓
+
+Estimated Learning Load
+
+↓
+
+Study Strategy
+
+Everything should be generated from fuzzyResult.
+
+---
+
+# 12. Micro Animations
+
+Improve polish.
+
+Add subtle animations for
+
+Cards
+
+Progress Bars
+
+Timeline
+
+Checklist
+
+Pomodoro Blocks
+
+Readiness Meter
+
+Avoid excessive animations.
+
+Use Framer Motion consistently.
+
+---
+
+# 13. Accessibility
 
 Support
 
-- Mobile
-- Tablet
-- Laptop
-- Desktop
+Keyboard navigation
+
+ARIA labels
+
+Screen readers
+
+Reduced motion
+
+High contrast mode
+
+---
+
+# 14. Responsive Design
+
+Ensure every new component supports
+
+Mobile
+
+Tablet
+
+Laptop
+
+Desktop
 
 Avoid overflow.
 
@@ -320,53 +437,40 @@ Maintain readability.
 
 ---
 
-# 12. Preserve Existing Design
+# Performance Requirements
 
-Do NOT redesign the page.
+Do NOT execute calculateFuzzy().
 
-Keep:
+Continue using
 
-- Tailwind CSS
-- Shadcn UI
-- Framer Motion
-- Existing cards
-- Existing typography
-- Existing color palette
-- Existing responsive layout
+shared fuzzyResult
 
-Only enhance the visualization and interaction.
+from StudySyncProvider.
 
----
+Avoid unnecessary renders.
 
-# Performance
-
-Do NOT execute calculateFuzzy() again.
-
-The page must continue consuming the shared fuzzyResult from StudySyncProvider.
-
-Do not introduce duplicate calculations.
-
-Use memoization where beneficial.
+Memoize expensive UI calculations.
 
 ---
 
 # Deliverables
 
-Before implementation:
+Before implementation
 
-1. Review the current Fuzzy Logic page.
-2. Identify visualization improvements.
-3. Explain why each enhancement improves user understanding.
-4. List every file that will be modified.
+1. Review the current AI Study Coach.
+2. Identify reusable components.
+3. Explain how every enhancement improves the coaching experience.
+4. List all files that will be modified.
 
-Then implement the improvements.
+Then implement the enhancements.
 
-Finally provide:
+Finally provide
 
-- Files modified
-- UI improvements
-- Accessibility improvements
-- Performance considerations
-- Verification checklist
+- Files Modified
+- New Components
+- Performance Improvements
+- Accessibility Improvements
+- Responsive Improvements
+- Verification Checklist
 
-Ensure the final page remains fully synchronized with the existing Mamdani Fuzzy Engine while providing a significantly richer and more educational visualization experience.
+The final AI Study Coach should feel like a professional productivity assistant that helps users prepare, execute, and complete study sessions using the existing Mamdani recommendation as its intelligent foundation.
