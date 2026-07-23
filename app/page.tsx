@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useAdaptiveIntelligence } from "@/lib/adaptive-engine/hooks";
+import { usePredictiveIntelligence } from "@/lib/predictive-engine/hooks";
 import { LearningProfileCard } from "@/components/dashboard/LearningProfileCard";
 import { PatternRecognitionCard } from "@/components/dashboard/PatternRecognitionCard";
 import { HabitScoreCard } from "@/components/dashboard/HabitScoreCard";
@@ -11,6 +12,12 @@ import { SessionComparison } from "@/components/dashboard/SessionComparison";
 import { WeeklyReflection } from "@/components/dashboard/WeeklyReflection";
 import { PrivacySettings } from "@/components/dashboard/PrivacySettings";
 import { AdaptiveCoachCard } from "@/components/dashboard/AdaptiveCoachCard";
+import { TomorrowForecast } from "@/components/dashboard/TomorrowForecast";
+import { WeeklyForecast } from "@/components/dashboard/WeeklyForecast";
+import { TrendForecast } from "@/components/dashboard/TrendForecast";
+import { PredictionAccuracyCard } from "@/components/dashboard/PredictionAccuracy";
+import { WhatIfSimulator } from "@/components/dashboard/WhatIfSimulator";
+
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 
@@ -26,8 +33,14 @@ export default function DashboardPage() {
     isLoading 
   } = useAdaptiveIntelligence();
 
+  const {
+    tomorrowForecast,
+    weeklyForecast,
+    predictionAccuracy
+  } = usePredictiveIntelligence();
+
   if (isLoading) {
-    return <div className="p-8 text-center text-text-muted animate-pulse">Loading Adaptive Intelligence...</div>;
+    return <div className="p-8 text-center text-text-muted animate-pulse">Loading Intelligence...</div>;
   }
 
   return (
@@ -51,7 +64,7 @@ export default function DashboardPage() {
               transition={{ delay: 0.1 }}
               className="text-text-secondary"
             >
-              Welcome back to your personalized StudySync dashboard.
+              Welcome back to your intelligent StudySync dashboard.
             </motion.p>
           </div>
 
@@ -71,21 +84,17 @@ export default function DashboardPage() {
         {!hasData ? (
           <div className="bg-bg-secondary border border-border-color rounded-2xl p-12 text-center flex flex-col items-center">
             <h3 className="text-2xl font-bold mb-3">No study history yet</h3>
-            <p className="text-text-muted max-w-md mb-6">Start a new study session to unlock Adaptive Learning Intelligence. StudySync will learn your habits over time.</p>
+            <p className="text-text-muted max-w-md mb-6">Start a new study session to unlock Adaptive and Predictive Learning Intelligence. StudySync will learn your habits over time.</p>
             <Link href="/calculator" className="text-accent-blue font-bold flex items-center gap-2 hover:underline">
               Go to Calculator <ArrowRight size={16} />
             </Link>
           </div>
         ) : (
           <>
-            {/* Top Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <LearningProfileCard profile={profile} />
-              </div>
-              <div className="lg:col-span-1">
-                <AdaptiveCoachCard />
-              </div>
+            {/* Top Row: Adaptive Coach & Tomorrow's Forecast */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <AdaptiveCoachCard />
+              <TomorrowForecast data={tomorrowForecast} />
             </div>
 
             {/* Warning Row */}
@@ -93,20 +102,47 @@ export default function DashboardPage() {
               <BurnoutWarning status={burnoutStatus} />
             )}
 
+            {/* Middle Row: Predictions and Simulations */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <WeeklyForecast data={weeklyForecast} />
+              </div>
+              <div className="lg:col-span-2">
+                <WhatIfSimulator />
+              </div>
+            </div>
+
+            {/* Profile & Habits */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <LearningProfileCard profile={profile} />
+              </div>
+              <div className="lg:col-span-1">
+                <HabitScoreCard score={habitScore} />
+              </div>
+            </div>
+
+            {/* Timelines and Trends */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <TrendForecast />
+              <ImprovementTimeline />
+            </div>
+
+            {/* Retrospectives & Accuracies */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-1">
+                <PredictionAccuracyCard data={predictionAccuracy} />
+              </div>
+              <div className="lg:col-span-2">
+                <SessionComparison data={sessionComparison} />
+              </div>
+            </div>
+            
+            {/* Weekly Reflection */}
+            <WeeklyReflection data={weeklyReflection} />
+
             {/* Insights Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <PatternRecognitionCard patterns={patterns} />
-              <HabitScoreCard score={habitScore} />
-            </div>
-
-            {/* Timeline */}
-            <ImprovementTimeline />
-
-            {/* Comparison & Reflection */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <SessionComparison data={sessionComparison} />
-              <WeeklyReflection data={weeklyReflection} />
-            </div>
+            <PatternRecognitionCard patterns={patterns} />
 
             {/* Settings */}
             <div className="mt-8">

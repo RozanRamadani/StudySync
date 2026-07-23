@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
 import { Sparkles, Info } from 'lucide-react';
 import { useAdaptiveIntelligence } from '@/lib/adaptive-engine/hooks';
+import { usePredictiveIntelligence } from '@/lib/predictive-engine/hooks';
 
 export function AdaptiveCoachCard() {
   const { profile, hasData, sessions } = useAdaptiveIntelligence() as any;
+  const { tomorrowForecast } = usePredictiveIntelligence() as any;
 
   if (!hasData || !profile) {
     return (
@@ -23,14 +25,16 @@ export function AdaptiveCoachCard() {
     );
   }
 
-  // Generate adaptive advice based on history
+  // Generate adaptive & predictive advice based on history
   let advice = "You are maintaining a steady pace. Keep it up!";
-  if (profile.currentStreak > 3) {
-    advice = "You've been very consistent recently. You may be ready for longer deep work sessions.";
+  if (tomorrowForecast && tomorrowForecast.predictedFocus > profile.averageFocus + 5) {
+    advice = "If your current pattern continues, your focus tomorrow will be higher than your average. You may be ready for longer deep work sessions.";
+  } else if (tomorrowForecast && tomorrowForecast.predictedFatigue > 70) {
+    advice = "Your historical trend suggests very high fatigue for your next session. Consider alternating difficult and moderate material to avoid burnout.";
+  } else if (profile.currentStreak > 3) {
+    advice = "You've been very consistent recently. If this continues, your consistency score will improve significantly next week.";
   } else if (profile.averageFatigue > 60) {
     advice = "Your average fatigue is high. Today's priority should be recovery after studying.";
-  } else if (profile.consistencyScore < 50) {
-    advice = "Try studying at your preferred time (" + profile.preferredTimeOfDay + ") to build consistency.";
   }
 
   return (
@@ -48,7 +52,7 @@ export function AdaptiveCoachCard() {
         <div className="bg-accent-blue/10 p-2 rounded-lg">
           <Sparkles className="text-accent-blue" size={24} />
         </div>
-        <h3 className="text-xl font-bold">Adaptive AI Coach</h3>
+        <h3 className="text-xl font-bold">Predictive AI Coach</h3>
       </div>
 
       <p className="text-lg font-serif font-medium text-text-primary mb-6 leading-relaxed">
@@ -64,8 +68,7 @@ export function AdaptiveCoachCard() {
         <ul className="text-xs text-text-muted space-y-1 ml-6 list-disc">
           <li>This recommendation is based on {sessions?.length || 0} previous study sessions.</li>
           <li>Your average focus is {profile.averageFocus}%.</li>
-          <li>Your fatigue is currently averaging {profile.averageFatigue}%.</li>
-          <li>Your consistency is {profile.consistencyScore}%.</li>
+          <li>Your predicted future fatigue trend is {tomorrowForecast ? tomorrowForecast.predictedFatigue : profile.averageFatigue}%.</li>
         </ul>
       </div>
     </motion.div>
